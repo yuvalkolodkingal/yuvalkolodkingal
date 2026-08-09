@@ -4,7 +4,7 @@
 
 <p align="center">
   <a href="https://readme-typing-svg.demolab.com">
-    <img src="https://github-readme-stats.vercel.app/api?username=yuvalkolodkingal&show_icons=true&theme=tokyonight&hide_border=true&count_private=true" alt="GitHub Stats Card" width="48%" />
+    <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=26&pause=1000&color=61AFEF&center=true&vCenter=true&width=550&height=70&lines=Hi+there%2C+I'm+Yuval+👋;Lab+Automation+%26+Synthetic+Biology;Building+CalcuLab.bio;Hardware+%26+Arduino+Enthusiast" alt="Typing SVG Animation" />
   </a>
 </p>
 
@@ -92,10 +92,10 @@
 <!-- Note: Replace YOUR_GITHUB_USERNAME below with your actual GitHub username -->
 <p align="center">
   <a href="https://github.com/anuraghazra/github-readme-stats">
-    <img src="https://github-readme-stats.vercel.app/api?username=YOUR_GITHUB_USERNAME&show_icons=true&theme=tokyonight&hide_border=true&count_private=true" alt="GitHub Stats Card" width="48%" />
+    <img src="https://github-readme-stats.vercel.app/api?username=yuvalkolodkingal&show_icons=true&theme=tokyonight&hide_border=true&count_private=true" alt="GitHub Stats Card" width="48%" />
   </a>
   <a href="https://github.com/anuraghazra/github-readme-stats">
-    <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=YOUR_GITHUB_USERNAME&layout=compact&theme=tokyonight&hide_border=true" alt="Top Languages Card" width="48%" />
+    <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=yuvalkolodkingal&layout=compact&theme=tokyonight&hide_border=true" alt="Top Languages Card" width="48%" />
   </a>
 </p>
 
