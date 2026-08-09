@@ -18,9 +18,11 @@ TEAL = "#38bdae"
 YELLOW = "#e0af68"
 PINK = "#ff7a93"
 
-# none -> brightest, in Tokyo Night blues so the heatmap sits with the rest
-# of the profile instead of importing GitHub's green.
-HEAT = ["#1e2235", "#243a63", "#2f5fa8", "#4d8fe0", "#70a5fd", "#a5d6ff"]
+# none -> brightest, in Tokyo Night blues so the heatmap sits with the rest of
+# the profile instead of importing GitHub's green. Five entries, because
+# data-level only ever runs 0 to 4 and a sixth swatch would advertise a bucket
+# the legend can never show.
+HEAT = ["#1e2235", "#26406e", "#2f6bbd", "#54a0f0", "#8fd0ff"]
 
 MONO = (
     "ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,"
