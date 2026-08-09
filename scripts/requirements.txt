@@ -1,0 +1,7 @@
+requests==2.32.3
+beautifulsoup4==4.12.3
+
+# Portrait pipeline only. The daily workflow does not need these.
+# Install these locally when you want to regenerate the ASCII portrait
+# from a new photo:
+#   pip install pillow numpy opencv-python rembg

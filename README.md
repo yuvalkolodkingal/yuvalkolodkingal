@@ -1,89 +1,91 @@
-<p align="center">
-  <a href="https://readme-typing-svg.demolab.com">
-    <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=26&pause=1000&color=61AFEF&center=true&vCenter=true&width=550&height=70&lines=Hi+there%2C+I%27m+Yuval+%F0%9F%91%8B;Lab+Automation+%26+Synthetic+Biology;Fullstack+Development&v=4" alt="Typing SVG Animation" />
-  </a>
-</p>
+<div align="center">
 
-<p align="center">
-  <b>Undergraduate Researcher @ Scojen Institute, Reichman University</b><br/>
-  <i>Bridging Synthetic Biology, Lab Automation, Full-Stack Web Development, and Software Systems</i>
-</p>
+<h3><code>yuval@github ~ $ ./contributions.sh</code></h3>
 
-<p align="center">
-  <a href="https://www.linkedin.com/in/yuvalkolodkin/">
-    <img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn Badge" />
-  </a>
-  <a href="mailto:yuvalkgal@gmail.com">
-    <img src="https://img.shields.io/badge/Gmail-EA4335?style=for-the-badge&logo=gmail&logoColor=white" alt="Gmail Badge" />
-  </a>
-  <a href="https://www.calculab.bio/">
-    <img src="https://img.shields.io/badge/CalcuLab.bio-00C7B7?style=for-the-badge&logo=googlechrome&logoColor=white" alt="CalcuLab Badge" />
-  </a>
-</p>
+<img src="./assets/contrib-heatmap.svg" width="860" alt="Contribution heatmap for the last year" />
 
----
+<br><br>
 
-## 🧬 About Me
+<h3><code>yuval@github ~ $ whoami</code></h3>
 
-- 🔬 **Lab Automation & Synthetic Biology**: Undergraduate researcher at the **Scojen Institute (Reichman University)** focusing on modernizing laboratory workflows and synthetic biology research.
-- 💻 **Scientific Web Applications**: Co-creator of **[CalcuLab.bio](https://www.calculab.bio/)**, a web platform engineered for molecular biology and biochemistry calculations to eliminate manual errors and streamline lab calculations.
-- ⚙️ **DevOps & Continuous Integration**: Committed to robust software practices, leveraging automated CI/CD pipelines, containerization, and version control across **Git**, **GitHub**, and **GitLab**.
+<table>
+  <tr>
+    <td valign="top"><img src="./assets/ascii-portrait.svg" width="370" alt="ASCII art of a DNA double helix" /></td>
+    <td valign="top"><img src="./assets/info-card.svg" width="490" alt="Info card listing role, stack, location and contact" /></td>
+  </tr>
+</table>
 
----
+</div>
 
-## 🛠️ Tech Stack & Tools
+### `yuval@github ~ $ cat projects.md`
 
-<p align="center">
-  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" alt="JavaScript" />
-  <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python" />
-  <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5" />
-  <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white" alt="CSS3" />
-  <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React" />
-  <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node.js" />
-  <br/>
-  <img src="https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white" alt="Flask" />
-  <img src="https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white" alt="Django" />
-  <img src="https://img.shields.io/badge/C%2B%2B-00599C?style=for-the-badge&logo=cplusplus&logoColor=white" alt="C++" />
-  <img src="https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black" alt="Linux" />
-  <br/>
-  <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker" />
-  <img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white" alt="Git" />
-  <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" />
-  <img src="https://img.shields.io/badge/GitLab-FC6D26?style=for-the-badge&logo=gitlab&logoColor=white" alt="GitLab" />
-</p>
+| Project | What it is |
+| :-- | :-- |
+| [**CalcuLab**](https://www.calculab.bio/) | A web platform for molecular biology and biochemistry calculations. Built so researchers stop redoing dilution and molarity arithmetic by hand, where a slipped decimal costs a whole experiment. Made with [Avichay Nahami](https://www.linkedin.com/in/avichay-nahami-48765a22b/) at the Scojen Institute. |
 
----
+### `yuval@github ~ $ cat research.txt`
 
-## 🎯 Current Focus
+I am an undergraduate researcher at the Scojen Institute, Reichman University,
+working on lab automation and synthetic biology under Ilana Kolodkin-Gal.
 
-- 🚀 **CalcuLab.bio Expansion**: Scaling user features and expanding computational modules for life-science researchers.
-- 🐳 **Cloud & Containerization**: Mastering **Docker**, **Kubernetes**, and cloud architecture to deploy reproducible scientific services.
+In 2026 I presented CalcuLab as a poster at FISEB (ILANIT) in Eilat, station 58,
+under the title *A Comprehensive Web-Based Platform for Molecular Biology and
+Biochemistry Calculations*. Most of the questions I got were about which
+calculations people still do on paper, which is now the roadmap.
 
----
+### `yuval@github ~ $ ls certifications/`
 
-## 📊 GitHub Analytics
+<details>
+<summary>10 certificates, mostly IBM on Coursera</summary>
 
-<p align="center">
-  <a href="https://github.com/stats-organization/github-stats-extended">
-    <img src="https://github-stats-extended.vercel.app/api?username=yuvalkolodkingal&show_icons=true&theme=tokyonight&hide_border=true" alt="GitHub Stats Card" width="48%" />
-  </a>
-  <a href="https://github.com/stats-organization/github-stats-extended">
-    <img src="https://github-stats-extended.vercel.app/api/top-langs/?username=yuvalkolodkingal&layout=compact&theme=tokyonight&hide_border=true" alt="Top Languages Card" width="48%" />
-  </a>
-</p>
+<br>
 
----
+| Certificate | Issuer | Date |
+| :-- | :-- | :-- |
+| [Introduction to Containers with Docker, Kubernetes and OpenShift](https://www.coursera.org/account/accomplishments/records/A9G1IKTFIXAC) | IBM | Jun 2026 |
+| [Django Application Development with SQL and Databases](https://www.coursera.org/account/accomplishments/records/74ZY10PWP5BM) | IBM | Jun 2026 |
+| [Developing Back-End Apps with Node.js and Express](https://www.coursera.org/account/accomplishments/records/ZW4BZRQBE0RH) | IBM | Jun 2026 |
+| [Developing Front-End Apps with React](https://www.coursera.org/account/accomplishments/records/FOPQJMDEE4XC) | IBM | Jun 2026 |
+| [Introduction to Cloud Computing](https://www.coursera.org/account/accomplishments/records/6EI95MSNTOVR) | IBM | Jun 2026 |
+| [Mental Health Development, Difficulties, and Disorders](https://www.coursera.org/account/accomplishments/records/A4DEZ9HO9N0B) | MedCerts | Mar 2026 |
+| [Applied Software Engineering Fundamentals](https://www.coursera.org/account/accomplishments/specialization/5MLO8JXK67VJ) | IBM | Dec 2025 |
+| [Developing AI Applications with Python and Flask](https://www.coursera.org/account/accomplishments/records/OXIR6RX9FPAU) | IBM | Dec 2025 |
+| [Hands-on Introduction to Linux Commands and Shell Scripting](https://www.coursera.org/account/accomplishments/records/01V67ZGNASS9) | IBM | Dec 2025 |
+| [Introduction to HTML, CSS, and JavaScript](https://www.coursera.org/account/accomplishments/records/QYRH69RLESZY) | IBM | Dec 2025 |
 
-## 📫 Connect with Me
+</details>
 
-<p align="center">
-  <a href="https://www.linkedin.com/in/yuvalkolodkin/">
-    <img src="https://img.shields.io/badge/LinkedIn-Yuval%20Kolodkin%20Gal-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" />
-  </a>
-  <a href="mailto:yuvalkgal@gmail.com">
-    <img src="https://img.shields.io/badge/Email-yuvalkgal%40gmail.com-EA4335?style=for-the-badge&logo=gmail&logoColor=white" alt="Email" />
-  </a>
-  <a href="https://www.calculab.bio/">
-    <img src="https://img.shields.io/badge/Website-CalcuLab.bio-00C7B7?style=for-the-badge&logo=googlechrome&logoColor=white" alt="CalcuLab" />
-  </a>
-</p>
+### `yuval@github ~ $ ./contact.sh`
+
+- [linkedin.com/in/yuvalkolodkin](https://www.linkedin.com/in/yuvalkolodkin/)
+- [yuvalkgal@gmail.com](mailto:yuvalkgal@gmail.com)
+- [calculab.bio](https://www.calculab.bio/)
+
+<details>
+<summary><code>yuval@github ~ $ cat .github/how-this-is-built</code></summary>
+
+<br>
+
+Every moving piece on this page is an SVG generated by a script in
+[`scripts/`](./scripts) and committed to this repo. Nothing is fetched from a
+third-party stats service, so there is no rate limit to hit and no broken image
+icon when someone else's server goes down.
+
+| File | Made by | Refreshed |
+| :-- | :-- | :-- |
+| `assets/contrib-heatmap.svg` | `fetch_contributions.py` then `render_heatmap_svg.py` | Daily, by GitHub Actions |
+| `assets/ascii-portrait.svg` | `make_ascii_svg.py` | By hand, when the art changes |
+| `assets/info-card.svg` | `make_info_card.py` | By hand, when the details change |
+
+The heatmap reads the public calendar at
+`github.com/users/<username>/contributions`, which needs no API token. The
+animation is CSS keyframes and SMIL inside each SVG, because GitHub strips
+`<script>` from a README but does play animations in an image.
+
+```sh
+pip install -r scripts/requirements.txt
+python scripts/fetch_contributions.py
+python scripts/render_heatmap_svg.py
+```
+
+</details>

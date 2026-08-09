@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.venv/
+
+# Local portrait inputs. The generated SVG is committed, the source photo is not.
+source-photo.*
+source-prepped.png
