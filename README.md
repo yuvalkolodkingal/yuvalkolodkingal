@@ -64,11 +64,11 @@
 ## 📊 GitHub Analytics
 
 <p align="center">
-  <a href="https://github.com/anuraghazra/github-readme-stats">
-    <img src="https://github-readme-stats.vercel.app/api?username=yuvalkolodkingal&show_icons=true&theme=tokyonight&hide_border=true" alt="GitHub Stats Card" width="48%" />
+  <a href="https://github.com/stats-organization/github-stats-extended">
+    <img src="https://github-stats-extended.vercel.app/api?username=yuvalkolodkingal&show_icons=true&theme=tokyonight&hide_border=true" alt="GitHub Stats Card" width="48%" />
   </a>
-  <a href="https://github.com/anuraghazra/github-readme-stats">
-    <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=yuvalkolodkingal&layout=compact&theme=tokyonight&hide_border=true" alt="Top Languages Card" width="48%" />
+  <a href="https://github.com/stats-organization/github-stats-extended">
+    <img src="https://github-stats-extended.vercel.app/api/top-langs/?username=yuvalkolodkingal&layout=compact&theme=tokyonight&hide_border=true" alt="Top Languages Card" width="48%" />
   </a>
 </p>
 
