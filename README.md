@@ -2,21 +2,9 @@
 
 <img src="./assets/typing-header.svg" width="860" alt="Hi there, I'm Yuval. Lab automation and synthetic biology. Full-stack development." />
 
-<p>
-  <a href="https://www.linkedin.com/in/yuvalkolodkin/"><img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" /></a>
-  <a href="mailto:yuvalkgal@gmail.com"><img src="https://img.shields.io/badge/Gmail-EA4335?style=for-the-badge&logo=gmail&logoColor=white" alt="Email" /></a>
-  <a href="https://www.calculab.bio/"><img src="https://img.shields.io/badge/CalcuLab.bio-00C7B7?style=for-the-badge&logo=googlechrome&logoColor=white" alt="CalcuLab" /></a>
-</p>
-
 <h3><code>yuval@github ~ $ ./contributions.sh</code></h3>
 
-<img src="./assets/contrib-heatmap.svg" width="860" alt="Contribution heatmap for the last year" />
-
-<br><br>
-
-<h3><code>yuval@github ~ $ ./snake.sh</code></h3>
-
-<img src="./assets/snake.svg" width="860" alt="A snake eating the contribution graph" />
+<img src="./assets/snake.svg" width="860" alt="Contribution graph for the last year, with a snake eating its way across it" />
 
 <br><br>
 
@@ -113,13 +101,12 @@ down. Only the flat tech and contact badges come from shields.io.
 
 | File | Made by | Refreshed |
 | :-- | :-- | :-- |
-| `assets/contrib-heatmap.svg` | `fetch_contributions.py` then `render_heatmap_svg.py` | Daily, by GitHub Actions |
-| `assets/snake.svg` | `render_snake_svg.py` | Daily, by GitHub Actions |
+| `assets/snake.svg` | `fetch_contributions.py` then `render_snake_svg.py` | Daily, by GitHub Actions |
 | `assets/typing-header.svg` | `make_typing_svg.py` | By hand, when the lines change |
 | `assets/ascii-portrait.svg` | `make_ascii_svg.py` | By hand, when the art changes |
 | `assets/info-card.svg` | `make_info_card.py` | By hand, when the details change |
 
-The graph and the snake both read the public calendar at
+The graph reads the public calendar at
 `github.com/users/<username>/contributions`, which needs no API token, so the
 snake eats real squares. The motion is CSS keyframes and SMIL inside each SVG,
 because GitHub strips `<script>` from a README but does play animations in an
@@ -128,7 +115,6 @@ image.
 ```sh
 pip install -r scripts/requirements.txt
 python scripts/fetch_contributions.py
-python scripts/render_heatmap_svg.py
 python scripts/render_snake_svg.py
 ```
 

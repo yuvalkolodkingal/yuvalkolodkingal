@@ -31,16 +31,10 @@ jobs:
       - name: Scrape the contribution calendar
         run: python scripts/fetch_contributions.py
 
-      - name: Render the heatmap
-        run: python scripts/render_heatmap_svg.py
-
-      - name: Render the snake
+      - name: Render the graph
         run: python scripts/render_snake_svg.py
 
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: refresh contribution graph [skip ci]"
-          file_pattern: >-
-            data/contributions.json
-            assets/contrib-heatmap.svg
-            assets/snake.svg
+          file_pattern: "data/contributions.json assets/snake.svg"
