@@ -45,12 +45,9 @@ Section `[boot]`. Block `boot`. No heading by default (the image is the first th
 - `banner` (string, `<name> <title>`): the getty line before the login prompt.
 - `title` (string, `tty1`): the title bar.
 - `show_login` (bool, true), `show_last_login` (bool, true), `show_prompt` (bool, true): the three closing groups.
-- `step` (float, 0.16): seconds between lines.
-- `font` (float, 11.5), `row_height` (int, 19).
+- `step` (float, 0.16): seconds between lines. `font` (float, 11.5), `row_height` (int, 19).
 
-Data: build time for the `Last login` stamp. Nothing else, so it never goes stale in a way a reader could see.
-
-Size: 860 x (64 + rows * 19 + 16), rows = lines + 3 login + 2 last-login + 1 prompt. Eight lines give 346.
+Data: build time for the `Last login` stamp, nothing else. Size: 860 x (64 + rows * 19 + 16), rows = lines + 3 login + 2 last-login + 1 prompt; eight lines give 346.
 
 Motion: CSS. Each line fades in (`.05s linear forwards`) at 0.3 s + index * step; the banner, login and password follow with getty-like pauses; the stamp and the prompt come last, about four seconds in for eight lines. The cursor blinks. Reduced motion shows the whole log at once with a steady cursor.
 
@@ -63,16 +60,13 @@ The `neofetch` card: portrait on the left, system facts on the right, with the p
 Section `[neofetch]`. Block `neofetch`. Heading `neofetch`. Asset `neofetch.svg`.
 
 - `rows` (array of `{ key, value, color }`): the facts. `color` is a theme role (`teal`, `yellow`, `blue`, ...) or a hex; default `fg`. A value longer than the column is cut with `…`.
-- `title` (string, `neofetch`), `swatches` (bool, true), `portrait_width` (int, 370): the left column width when a portrait is present.
-- `font` (float, 11.5), `row_height` (int, 19).
+- `title` (string, `neofetch`), `swatches` (bool, true), `portrait_width` (int, 370, the left column when a portrait is present), `font` (float, 11.5), `row_height` (int, 19).
 
 The portrait inside comes from `[portrait]` (below); its `mode`, `source`, `cols`, `rows`, `font`, `ramp`, `invert` and `color` all apply. Without a `[portrait]` section the rows start at the left edge and the card is as tall as the rows need.
 
 Placeholders in any value, filled by `live_values()` from the data files: `{uptime}` (account age, "1 year, 2 months"), `{repos}`, `{original_repos}`, `{stars}`, `{forks}`, `{followers}`, `{following}`, `{contributions}`, `{streak}` ("47d"), `{longest_streak}`, `{active_days}`, `{best_day}` ("Jun 18 (80)"), `{top_language}`, `{languages}` (top three names), `{language_shares}` ("Python 61%, ..."), `{built}` (the build stamp), `{location}` (from the GitHub profile). A placeholder with no data prints `--` and the whole value turns dim, so a missing `data/github.json` shows as `Packages: -- (repos)` rather than a wrong number.
 
-Data: `data/github.json` for repos, stars, uptime, languages and location; `data/contributions.json` for contributions and streaks; build time for `{built}` and the uptime arithmetic.
-
-Size: 860 x max(66 + (rows + 2) * 19 + 44, 372 with a portrait). Sixteen rows give 452.
+Data: `data/github.json` for repos, stars, uptime, languages and location; `data/contributions.json` for contributions and streaks; build time for `{built}` and the uptime arithmetic. Size: 860 x max(66 + (rows + 2) * 19 + 44, 372 with a portrait); sixteen rows give 452.
 
 Motion: the rows slide in from the left (10 px, 0.45 s ease-out) 60 ms apart from 0.35 s, CSS; the portrait wipes itself in once, SMIL. Reduced motion shows every row at once, drops the portrait clip and hides the cursors.
 
@@ -88,13 +82,10 @@ Section `[portrait]`. Block `whoami`, shared with info as a two-cell table; head
 - `source` (string): path relative to the repository root for `image` (needs Pillow) or `text`. A missing file prints a note and draws the helix.
 - `cols` (int, 84), `rows` (int, 47), `font` (float, 6.8): the grid. The defaults land the file at 371 x 372 so it lines up with a 490-wide info card.
 - `ramp` (string, `` " .`:-=+*cs#%@" ``): dark to light glyphs for `image` and `helix`.
-- `invert` (bool, false): flip the photo before ramping.
-- `color` (string): the ink; default is the theme's `ink`.
+- `invert` (bool, false): flip the photo before ramping. `color` (string): the ink; default is the theme's `ink`.
 - `title` (string, `./portrait.sh`), `width` (int, 370): the README cell width.
 
-Data: none.
-
-Size: (cols * font * 0.6 + 28) x (rows * font + 52); 371 x 372 by default.
+Data: none. Size: (cols * font * 0.6 + 28) x (rows * font + 52); 371 x 372 by default.
 
 Motion: SMIL. Each non-blank row wipes left to right over 0.34 s with a block cursor riding the edge, each row 45 ms after the one above, once, then frozen. Forty-seven rows finish in about 2.5 s. Reduced motion removes the clips and hides the cursors.
 
@@ -110,9 +101,7 @@ Section `[info]`. Block `whoami` (with portrait). Heading `whoami`. Asset `info.
 - `title` (string, `user@host`), `key_color` (string, accent), `show_swatches` (bool, true), `swatches` (array of colour roles, default `dim, pink, teal, yellow, blue, purple, cyan, fg`).
 - `value_x` (int, 122): where values start, in pixels. `pad` (int, 20), `font` (float, 11.5), `row_height` (int, 21), `width` (int, 490).
 
-Data: none.
-
-Size: 490 x (66 + rows * 21 + 50); 284 for eight rows. Set `width = 860` when there is no portrait beside it.
+Data: none. Size: 490 x (66 + rows * 21 + 50); 284 for eight rows. Set `width = 860` when there is no portrait beside it.
 
 Motion: CSS slide-in, 60 ms apart from 0.25 s. Reduced motion shows all rows.
 
@@ -125,12 +114,9 @@ One line of large text types itself out, holds with a blinking cursor, backspace
 Section `[typing]`. Block `typing`. No heading. Asset `typing.svg`.
 
 - `lines` (required; array of strings).
-- `font` (float, 27), `height` (int, 78), `color` (string, accent).
-- `per_char` (float, 0.075) typing speed, `erase_char` (float, 0.028) backspacing, `hold` (float, 1.7) pause on the full line, `gap` (float, 0.35) pause when empty, `blink` (float, 0.5) cursor period while holding.
+- `font` (float, 27), `height` (int, 78), `color` (string, accent), `per_char` (float, 0.075) typing speed, `erase_char` (float, 0.028) backspacing, `hold` (float, 1.7) pause on the full line, `gap` (float, 0.35) pause when empty, `blink` (float, 0.5) cursor period while holding.
 
-Data: none.
-
-Size: 860 x 78. Characters above U+2500 count as two columns; keep the lines ASCII so the cursor lands on the edge of the text.
+Data: none. Size: 860 x 78. Characters above U+2500 count as two columns; keep the lines ASCII so the cursor lands on the edge of the text.
 
 Motion: SMIL, looping. The cycle is the sum over lines of `chars * per_char + hold + chars * erase_char + gap`; three 30-character lines give about 15 s. There is no still form and no CSS block, so `build.py check` reports the file as animated without a reduced-motion rule. Keep the lines short and few, or use boot, which freezes.
 
@@ -148,9 +134,7 @@ Section `[snake]` (may be empty). Block `snake`. Heading `git-cal --snake`. Asse
 - `footer` (bool, true).
 - `cached_note` (string): a date printed dim after the footer. `build.py` sets it from `data/build.json` when the calendar could not be refreshed and the old file was kept.
 
-Data: `data/contributions.json`. When it is missing the build draws a blank 53-week grid (`fetch_contributions.empty_calendar`) so the page still renders: no coloured squares, `0 contributions` in the footer.
-
-Size: 860 x 214 (192 without the footer).
+Data: `data/contributions.json`. When it is missing the build draws a blank 53-week grid (`fetch_contributions.empty_calendar`) so the page still renders: no coloured squares, `0 contributions` in the footer. Size: 860 x 214 (192 without the footer).
 
 Motion: SMIL, looping; about 21.7 s for a full year at the default step (389 squares of path, regrow, pause). The head carries a glow filter and the seven body segments follow it a square behind each. Reduced motion swaps the moving layer for a still twin: the full calendar, no snake.
 
@@ -166,9 +150,7 @@ Section `[plate]`. Block `lab` beside systemctl (a two-cell table, heading `plat
 - `pitch` (float, 20): well spacing; `radius` (float, 6.5).
 - `title` (string, `plate-reader --last 96d`), `width` (int, 370). The card grows if the wells need more.
 
-Data: the tail of `data/contributions.json`. Missing data means the blank calendar: every well empty, `0 positive`.
-
-Size: 370 x 256.
+Data: the tail of `data/contributions.json`; missing data means the blank calendar, every well empty, `0 positive`. Size: 370 x 256.
 
 Motion: SMIL, once. A gradient beam moves across in 3.36 s from 0.3 s; the positive wells in each column fade from 15% to full 0.28 s per column as it passes. Reduced motion shows the still twin with every well lit and no beam.
 
@@ -183,8 +165,7 @@ Section `[systemctl]` for the card, `[[projects]]` for the units. Block `lab` (w
 `[systemctl]` keys:
 
 - `title` (string): default `systemctl status <units>`.
-- `host` (string): in the journal lines; default the profile host.
-- `empty` (string, `no units found`), `font` (11.5), `row_height` (21).
+- `host` (string): in the journal lines; default the profile host. `empty` (string, `no units found`), `font` (11.5), `row_height` (21).
 - `width` (int): default 860 minus the plate width when plate is on, else 860.
 
 `[[projects]]` entry fields:
@@ -199,9 +180,7 @@ Section `[systemctl]` for the card, `[[projects]]` for the units. Block `lab` (w
 
 PID, tasks, memory, CPU and the start time are decoration derived from a hash of the unit name, so they never change between builds. The journal timestamps are the build time.
 
-Data: build time. Without `[[projects]]` the top starred repo from `data/github.json` becomes the unit; without that too the card prints `empty`.
-
-Size: 490 x (66 + (rows - 1) * 21 + 28); one unit with three journal lines is 13 rows, 346 high. A second unit adds a blank row plus its own.
+Data: build time. Without `[[projects]]` the top starred repo from `data/github.json` becomes the unit; without that too the card prints `empty`. Size: 490 x (66 + (rows - 1) * 21 + 28); one unit with three journal lines is 13 rows, 346 high, and a second unit adds a blank row plus its own.
 
 Motion: CSS rows 50 ms apart from 0.2 s; the dot pulses (SMIL opacity, 2.4 s loop) with a still twin. Reduced motion shows all rows and a steady dot.
 
@@ -216,12 +195,9 @@ Section `[stack]`. Block `stack`. Heading `ls -F --color=auto ~/stack`. Asset `s
 - `groups` (array of `{ name, items, exec }`).
 - `columns` (int, 0): groups per row; 0 fits as many as the width allows.
 - `gap` (int, 2): blank columns between groups.
-- `show_prompt` (bool, true): a prompt with a blinking cursor after the listing.
-- `title` (string, `ls -F --color=auto ~/stack`), `empty` (string, the `ls: cannot access` error), `font` (11.5), `row_height` (21).
+- `show_prompt` (bool, true): a prompt with a blinking cursor after the listing. `title` (string, `ls -F --color=auto ~/stack`), `empty` (string, the `ls: cannot access` error), `font` (11.5), `row_height` (21).
 
-Data: none.
-
-Size: 860 x (66 + lines * 21 + 30, or + 12 without the prompt), lines = the tallest group per row plus one blank line between rows. Four groups, the tallest six items, no prompt: 225.
+Data: none. Size: 860 x (66 + lines * 21 + 30, or + 12 without the prompt), lines = the tallest group per row plus one blank line between rows. Four groups, the tallest six items, no prompt: 225.
 
 Motion: CSS. Each visual line slides in 70 ms after the previous, top to bottom across all columns, the way a terminal prints. Reduced motion shows the listing and a steady cursor.
 
@@ -241,9 +217,7 @@ Section `[gitlog]` for the card, `[[timeline]]` for the entries. Block `gitlog`.
 - `date` (string): `YYYY`, `YYYY-MM` or `YYYY-MM-DD`. Entries sort by this as text, descending; an empty date prints `----` and sorts last.
 - `tag` (string): a `tag:` decoration.
 
-Data: none.
-
-Size: 860 x (66 + rows * 21 + 12); six entries give 204.
+Data: none. Size: 860 x (66 + rows * 21 + 12); six entries give 204.
 
 Motion: CSS fade, 70 ms apart. Reduced motion shows every line.
 
@@ -258,9 +232,7 @@ Section `[activity]`. Block `activity`. Heading `git log --oneline --all --since
 - `limit` (int, 10): rows; the fetcher keeps at most 12.
 - `title` (string, `git log --oneline --all`), `empty` (string, `no public activity in the last 90 days`), `font` (11.5), `row_height` (21).
 
-Data: `activity` in `data/github.json`, from `/users/{u}/events/public`, minus `[data].exclude_repos`. Missing data prints `empty`.
-
-Size: 860 x (66 + rows * 21 + 30); ten rows give 306.
+Data: `activity` in `data/github.json`, from `/users/{u}/events/public`, minus `[data].exclude_repos`; missing data prints `empty`. Size: 860 x (66 + rows * 21 + 30); ten rows give 306.
 
 Motion: CSS slide-in, 70 ms apart; the cursor blinks. Reduced motion shows all rows and a steady cursor.
 
@@ -275,9 +247,7 @@ Section `[languages]`. Block `languages`. Heading `du -sh languages/* | sort -rh
 - `limit` (int, 6).
 - `title`, `empty` (string, `no language data yet`), `font` (11.5), `row_height` (24).
 
-Data: `languages` in `data/github.json`: bytes per language across original, non-archived repositories, newest-pushed first up to `[data].max_language_repos`, with no repository allowed more than `[data].cap_share` of the total (0.4) so one vendored bundle does not change who the person is. Without a token the fetcher falls back to counting primary languages. Missing data prints `empty`.
-
-Size: 860 x (66 + rows * 24 + 12); six rows give 222.
+Data: `languages` in `data/github.json`: bytes per language across original, non-archived repositories, newest-pushed first up to `[data].max_language_repos`, with no repository allowed more than `[data].cap_share` of the total (0.4) so one vendored bundle does not change who the person is. Without a token the fetcher falls back to counting primary languages. Missing data prints `empty`. Size: 860 x (66 + rows * 24 + 12); six rows give 222.
 
 Motion: CSS. Rows fade in 90 ms apart and each bar scales from 0 to its width over 0.9 s. Reduced motion shows the full bars.
 
@@ -296,9 +266,7 @@ Section `[finger]`. Block `finger`. Heading `finger {user}`. Asset `finger.svg`.
 - `title` (`finger <login>`), `column` (int, 40): where the second pair on a line starts, `tty` (`pts/0`), `origin` (`github-actions`), `font` (11.5), `row_height` (21).
 - README only: `links` (array of `{ label, url }`) for the `xdg-open` line. Without it, `mail` becomes an `Email` link and `site` a `Website` link.
 
-Data: build time for `On since`; `data/github.json` only for the name and blog fallbacks.
-
-Size: 860 x (66 + (rows - 1) * 21 + 28); office, mail, site, one field and a two-line plan make ten rows, 283.
+Data: build time for `On since`; `data/github.json` only for the name and blog fallbacks. Size: 860 x (66 + (rows - 1) * 21 + 28); office, mail, site, one field and a two-line plan make ten rows, 283.
 
 Motion: CSS slide-in, 60 ms apart from 0.25 s. Reduced motion shows all rows.
 
@@ -316,9 +284,7 @@ Section `[exit]`. Block `exit`. Heading `exit`. Asset `exit.svg`. No title bar.
 - `host` (string): default the profile host.
 - `per_char` (float, 0.06), `begin` (float, 0.4), `font` (11.5), `row_height` (20).
 
-Data: build time and the git sha.
-
-Size: 860 x 84.
+Data: build time and the git sha. Size: 860 x 84.
 
 Motion: SMIL typewriter that plays once and freezes (about 1.2 s for the default line), then `logout` and the farewell reveal in CSS. Reduced motion removes the clip, hides the cursor and shows all three lines.
 
