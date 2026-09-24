@@ -175,6 +175,13 @@ class Build:
     def on(self, panel):
         return profile_config.enabled(self.config, panel)
 
+    def on_with(self, panel, array_key):
+        """Panels driven by an array table: on when the array exists, unless
+        the panel's own section says enabled = false."""
+        if panel in self.config:
+            return self.on(panel)
+        return bool(self.config.get(array_key))
+
     def section(self, panel):
         return self.config.get(panel) or {}
 
@@ -212,20 +219,18 @@ class Build:
             import render_plate
             cfg = self.section("plate")
             out.append(("plate", lambda t, cfg=cfg: render_plate.render(t, cfg, ctx, int(cfg.get("width", 370)), self.static)))
-        if self.on("systemctl") or self.config.get("projects"):
+        if self.on_with("systemctl", "projects"):
             import render_systemctl
             cfg = dict(self.section("systemctl"))
             cfg["projects"] = self.config.get("projects") or []
-            if cfg["projects"] or self.on("systemctl"):
-                width = int(cfg.get("width", w - int(self.section("plate").get("width", 370)) if self.on("plate") else w))
-                out.append(("systemctl", lambda t, cfg=cfg, width=width: render_systemctl.render(t, cfg, ctx, width, self.static)))
+            width = int(cfg.get("width", w - int(self.section("plate").get("width", 370)) if self.on("plate") else w))
+            out.append(("systemctl", lambda t, cfg=cfg, width=width: render_systemctl.render(t, cfg, ctx, width, self.static)))
         if self.on("stack"):
             import render_stack
             out.append(("stack", lambda t, cfg=self.section("stack"): render_stack.render(t, cfg, ctx, w, self.static)))
-        if self.on("gitlog") or self.config.get("timeline"):
+        if self.on_with("gitlog", "timeline"):
             import render_gitlog
-            if self.config.get("timeline") or self.on("gitlog"):
-                out.append(("gitlog", lambda t, cfg=self.section("gitlog"): render_gitlog.render(t, cfg, ctx, w, self.static)))
+            out.append(("gitlog", lambda t, cfg=self.section("gitlog"): render_gitlog.render(t, cfg, ctx, w, self.static)))
         if self.on("activity"):
             import render_activity
             out.append(("activity", lambda t, cfg=self.section("activity"): render_activity.render(t, cfg, self.github, w, self.static)))
@@ -317,7 +322,7 @@ class Build:
             b["snake"] = self.heading("snake") + self.image_html(
                 "snake", self.alt("snake", f"Contribution calendar for the last year with a snake eating the active days; {total} contributions"))
         have_plate = self.on("plate")
-        have_units = bool(self.config.get("projects")) or self.on("systemctl")
+        have_units = self.on_with("systemctl", "projects")
         if have_plate and have_units:
             b["lab"] = self.heading("lab", self.section("systemctl")) + (
                 "<table>\n  <tr>\n"
@@ -332,7 +337,7 @@ class Build:
             groups = self.section("stack").get("groups") or []
             listing = "; ".join(", ".join(g.get("items", [])) for g in groups if isinstance(g, dict))
             b["stack"] = self.heading("stack") + self.image_html("stack", self.alt("stack", f"ls of ~/stack: {listing}"))
-        if self.config.get("timeline") or self.on("gitlog"):
+        if self.on_with("gitlog", "timeline"):
             subjects = "; ".join(e.get("subject", "") for e in self.config.get("timeline") or [] if isinstance(e, dict))
             b["gitlog"] = self.heading("gitlog") + self.image_html("gitlog", self.alt("gitlog", f"git log of milestones: {subjects}"))
         if self.on("activity"):

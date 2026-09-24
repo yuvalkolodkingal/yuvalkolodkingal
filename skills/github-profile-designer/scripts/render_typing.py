@@ -49,7 +49,12 @@ def render(theme, config, width=860):
     slots = [count * per_char + hold + count * erase_char + gap for count in widths]
     cycle = sum(slots)
 
-    out = [svg_open(width, height, " / ".join(lines)), card(theme, width, height), "<defs>"]
+    # Reduced motion: the first line stands still and complete, the others
+    # and the cursor are hidden. clip-path as a CSS property beats the
+    # presentation attribute, and display is never animated.
+    hidden = "".join(f".t{index}{{display:none}}" for index in range(1, len(lines)))
+    css = f"@media (prefers-reduced-motion:reduce){{.t{{clip-path:none}}{hidden}.c{{display:none}}}}"
+    out = [svg_open(width, height, " / ".join(lines)), f"<style>{css}</style>", card(theme, width, height), "<defs>"]
 
     starts, running = [], 0.0
     for slot in slots:
@@ -94,7 +99,7 @@ def render(theme, config, width=860):
         # textLength pins the advance so the clip edge always lands on a
         # character boundary, whatever monospace font the reader has.
         out.append(
-            f'<text clip-path="url(#t{index})" x="{left:.2f}" y="{baseline}" '
+            f'<text class="t t{index}" clip-path="url(#t{index})" x="{left:.2f}" y="{baseline}" '
             f'xml:space="preserve" font-family="{MONO}" font-size="{font}" '
             f'font-weight="600" fill="{colour}" textLength="{run:.2f}" '
             f'lengthAdjust="spacing">{esc(line)}</text>'
@@ -127,7 +132,7 @@ def render(theme, config, width=860):
         xs, x_keys = timeline(moves, cycle)
 
         out.append(
-            f'<rect y="{baseline - font + 5}" width="{adv:.2f}" '
+            f'<rect class="c" y="{baseline - font + 5}" width="{adv:.2f}" '
             f'height="{font}" fill="{colour}" opacity="0" x="{left:.2f}">'
             f'<animate attributeName="x" calcMode="discrete" values="{xs}" '
             f'keyTimes="{x_keys}" dur="{cycle:.3f}s" repeatCount="indefinite"/>'
