@@ -10,7 +10,7 @@ score out of 100 and fixes the user can apply today. Everything before that
 is how to get the numbers right.
 
 The ground truth for what GitHub renders is
-`../github-profile-designer/references/github-readme-constraints.md`
+`references/github-readme-constraints.md`
 (installed next to this skill). Read it before your first review; the rubric
 in `references/scoring-rubric.md` quotes the rules that carry points. Do not
 invent GitHub behaviour: if a claim is not in the constraints file, verify it

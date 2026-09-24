@@ -248,6 +248,9 @@ def fetch_activity(session, user, now):
         })
         if len(lines) >= MAX_ACTIVITY:
             break
+    # Folding can leave a merged push slightly out of order; the panel reads
+    # newest first, so sort by time before handing the list over.
+    lines.sort(key=lambda line: line.get("at", ""), reverse=True)
     return lines
 
 

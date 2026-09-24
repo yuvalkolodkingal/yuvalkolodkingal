@@ -7,7 +7,7 @@ also has other problems worth naming. `scripts/check_readme.py` applies the
 mechanical rows automatically and marks the rest for the reviewer.
 
 The rules cited as "constraints" come from
-`github-profile-designer/references/github-readme-constraints.md`. That file
+`references/github-readme-constraints.md`. That file
 wins if the two ever disagree.
 
 ## a. Renders correctly (20)
