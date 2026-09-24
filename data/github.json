@@ -1,0 +1,291 @@
+{
+ "username": "yuvalkolodkingal",
+ "generated": "2026-09-24",
+ "generated_at": "2026-09-24 16:55 UTC",
+ "user": {
+  "login": "yuvalkolodkingal",
+  "name": "Yuval Kolodkin-Gal",
+  "bio": "",
+  "company": "",
+  "location": "Israel",
+  "blog": "",
+  "avatar_url": "https://avatars.githubusercontent.com/u/286026782?v=4",
+  "followers": 1,
+  "following": 1,
+  "public_repos": 14,
+  "created_at": "2026-05-19"
+ },
+ "totals": {
+  "repos": 14,
+  "original_repos": 9,
+  "stars": 2,
+  "forks": 0,
+  "followers": 1,
+  "following": 1
+ },
+ "top_repos": [
+  {
+   "name": "claude-science-desktop",
+   "full_name": "yuvalkolodkingal/claude-science-desktop",
+   "description": "Unofficial desktop window for Claude Science - starts the local daemon and renders its UI natively. Not affiliated with Anthropic.",
+   "url": "https://github.com/yuvalkolodkingal/claude-science-desktop",
+   "stars": 1,
+   "forks": 0,
+   "language": "Shell",
+   "fork": false,
+   "archived": false,
+   "pushed_at": "2026-08-05T13:57:13Z",
+   "topics": []
+  },
+  {
+   "name": "Universal-Subtitle-Translator",
+   "full_name": "yuvalkolodkingal/Universal-Subtitle-Translator",
+   "description": "",
+   "url": "https://github.com/yuvalkolodkingal/Universal-Subtitle-Translator",
+   "stars": 1,
+   "forks": 0,
+   "language": "TypeScript",
+   "fork": false,
+   "archived": false,
+   "pushed_at": "2026-06-16T19:31:00Z",
+   "topics": []
+  },
+  {
+   "name": "yuvalkolodkingal",
+   "full_name": "yuvalkolodkingal/yuvalkolodkingal",
+   "description": "Special GitHub profile README repository",
+   "url": "https://github.com/yuvalkolodkingal/yuvalkolodkingal",
+   "stars": 0,
+   "forks": 0,
+   "language": "Python",
+   "fork": false,
+   "archived": false,
+   "pushed_at": "2026-09-24T16:55:07Z",
+   "topics": []
+  },
+  {
+   "name": "personal-agent",
+   "full_name": "yuvalkolodkingal/personal-agent",
+   "description": "Private hardening preview of Personal Agent, a bounded cross-platform desktop assistant",
+   "url": "https://github.com/yuvalkolodkingal/personal-agent",
+   "stars": 0,
+   "forks": 0,
+   "language": "Rust",
+   "fork": false,
+   "archived": false,
+   "pushed_at": "2026-09-23T13:10:45Z",
+   "topics": []
+  },
+  {
+   "name": "aqua-glass",
+   "full_name": "yuvalkolodkingal/aqua-glass",
+   "description": "",
+   "url": "https://github.com/yuvalkolodkingal/aqua-glass",
+   "stars": 0,
+   "forks": 0,
+   "language": "JavaScript",
+   "fork": false,
+   "archived": false,
+   "pushed_at": "2026-08-09T18:09:12Z",
+   "topics": []
+  },
+  {
+   "name": "biocast",
+   "full_name": "yuvalkolodkingal/biocast",
+   "description": "Parametric shape generation and MICP success estimation for bio-cemented construction waste (Bacillus subtilis)",
+   "url": "https://github.com/yuvalkolodkingal/biocast",
+   "stars": 0,
+   "forks": 0,
+   "language": "Python",
+   "fork": false,
+   "archived": false,
+   "pushed_at": "2026-08-09T12:13:55Z",
+   "topics": []
+  }
+ ],
+ "languages": [
+  {
+   "name": "Rust",
+   "bytes": 1321065,
+   "percent": 42.3,
+   "color": "#dea584"
+  },
+  {
+   "name": "JavaScript",
+   "bytes": 644993,
+   "percent": 20.6,
+   "color": "#f1e05a"
+  },
+  {
+   "name": "Python",
+   "bytes": 468540,
+   "percent": 15.0,
+   "color": "#3572A5"
+  },
+  {
+   "name": "TypeScript",
+   "bytes": 419600,
+   "percent": 13.4,
+   "color": "#3178c6"
+  },
+  {
+   "name": "CSS",
+   "bytes": 203996,
+   "percent": 6.5,
+   "color": "#663399"
+  },
+  {
+   "name": "Shell",
+   "bytes": 31676,
+   "percent": 1.0,
+   "color": "#89e051"
+  },
+  {
+   "name": "HTML",
+   "bytes": 31664,
+   "percent": 1.0,
+   "color": "#e34c26"
+  },
+  {
+   "name": "Makefile",
+   "bytes": 3753,
+   "percent": 0.1,
+   "color": "#427819"
+  },
+  {
+   "name": "Dockerfile",
+   "bytes": 1369,
+   "percent": 0.0,
+   "color": "#384d54"
+  },
+  {
+   "name": "Procfile",
+   "bytes": 28,
+   "percent": 0.0,
+   "color": ""
+  }
+ ],
+ "activity": [
+  {
+   "type": "create",
+   "summary": "created branch main in JollyFiInc/meme-skills",
+   "detail": "",
+   "repo": "JollyFiInc/meme-skills",
+   "commits": 0,
+   "count": 1,
+   "at": "2026-09-16T15:30:07Z",
+   "ago": "1w ago",
+   "sha": "0827689"
+  },
+  {
+   "type": "public",
+   "summary": "open-sourced JollyFiInc/gaylaxy",
+   "detail": "",
+   "repo": "JollyFiInc/gaylaxy",
+   "commits": 0,
+   "count": 1,
+   "at": "2026-09-16T07:42:53Z",
+   "ago": "1w ago",
+   "sha": "8752830"
+  },
+  {
+   "type": "fork",
+   "summary": "forked ONLYOFFICE/DesktopEditors",
+   "detail": "",
+   "repo": "ONLYOFFICE/DesktopEditors",
+   "commits": 0,
+   "count": 1,
+   "at": "2026-09-05T12:30:50Z",
+   "ago": "2w ago",
+   "sha": "3092917"
+  },
+  {
+   "type": "push",
+   "summary": "10 commits to yuvalkolodkingal/openotes",
+   "detail": "",
+   "repo": "yuvalkolodkingal/openotes",
+   "commits": 10,
+   "count": 10,
+   "at": "2026-09-02T16:09:50Z",
+   "ago": "3w ago",
+   "sha": "7e3865e"
+  },
+  {
+   "type": "public",
+   "summary": "open-sourced yuvalkolodkingal/biocast",
+   "detail": "",
+   "repo": "yuvalkolodkingal/biocast",
+   "commits": 0,
+   "count": 1,
+   "at": "2026-08-04T08:02:20Z",
+   "ago": "1mo ago",
+   "sha": "9172608"
+  },
+  {
+   "type": "push",
+   "summary": "6 commits to yuvalkolodkingal/openotes",
+   "detail": "",
+   "repo": "yuvalkolodkingal/openotes",
+   "commits": 6,
+   "count": 6,
+   "at": "2026-09-02T09:11:24Z",
+   "ago": "3w ago",
+   "sha": "b75e84f"
+  },
+  {
+   "type": "create",
+   "summary": "created branch claude/agents-sql-sync-auth-mobile-kv9x7f in yuvalkolodkingal/openotes",
+   "detail": "",
+   "repo": "yuvalkolodkingal/openotes",
+   "commits": 0,
+   "count": 1,
+   "at": "2026-09-02T15:55:20Z",
+   "ago": "3w ago",
+   "sha": "4414063"
+  },
+  {
+   "type": "push",
+   "summary": "13 commits to yuvalkolodkingal/openotes",
+   "detail": "",
+   "repo": "yuvalkolodkingal/openotes",
+   "commits": 13,
+   "count": 13,
+   "at": "2026-09-01T13:58:51Z",
+   "ago": "3w ago",
+   "sha": "3172fb3"
+  },
+  {
+   "type": "create",
+   "summary": "created branch claude/agent-protocol-cloud-drive-sync-vr0u0z in yuvalkolodkingal/openotes",
+   "detail": "",
+   "repo": "yuvalkolodkingal/openotes",
+   "commits": 0,
+   "count": 1,
+   "at": "2026-09-01T12:49:30Z",
+   "ago": "3w ago",
+   "sha": "8393420"
+  },
+  {
+   "type": "push",
+   "summary": "25 commits to yuvalkolodkingal/openotes",
+   "detail": "",
+   "repo": "yuvalkolodkingal/openotes",
+   "commits": 25,
+   "count": 25,
+   "at": "2026-09-01T13:08:49Z",
+   "ago": "3w ago",
+   "sha": "9e0458e"
+  },
+  {
+   "type": "create",
+   "summary": "created branch claude/spec-execution-jznkux in yuvalkolodkingal/openotes",
+   "detail": "",
+   "repo": "yuvalkolodkingal/openotes",
+   "commits": 0,
+   "count": 1,
+   "at": "2026-08-31T16:02:05Z",
+   "ago": "3w ago",
+   "sha": "1712327"
+  }
+ ]
+}
