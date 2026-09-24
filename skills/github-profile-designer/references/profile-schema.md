@@ -47,7 +47,7 @@ Options for the GitHub fetcher (`data/github.json`).
 | :-- | :-- | :-- | :-- |
 | `exclude_repos` | list[str] | `["<u>/<u>"]` | repositories left out of languages and activity; the profile repo by default |
 | `max_language_repos` | int | 40 | newest-pushed repositories that get a languages request (one request each) |
-| `cap_share` | float | 0.4 | the most any single repository may contribute to the language bytes; 1 disables |
+| `cap_share` | float | 0.4 | the most any single repository may contribute to the language bytes, measured against the capped total; with fewer repositories than 1/cap the shares equalise instead; 1 disables |
 
 ## Panels
 

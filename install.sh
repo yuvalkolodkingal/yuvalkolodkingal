@@ -141,10 +141,20 @@ ${1#--dir=}" ;;
         shift
     done
 
+    if [ -z "${HOME:-}" ]; then
+        if [ "$SCOPE" = "global" ] && [ -z "$CUSTOM_DIRS" ] && [ "$MODE" != "list" ]; then
+            die "HOME is not set; set it, or use --project or --dir PATH"
+        fi
+        HOME=""
+    fi
     if [ "$SCOPE" = "project" ]; then
         STORE="$PWD/.agents/skills"
     else
         STORE="$HOME/.agents/skills"
+    fi
+    if [ "$LINK" -eq 1 ] && [ "$SCOPE" = "project" ]; then
+        warn "--link is ignored with --project: project installs are copies so the repository stays portable"
+        LINK=0
     fi
 
     case "$MODE" in
@@ -206,14 +216,19 @@ do_list() {
 # --- ownership --------------------------------------------------------------
 
 ours() {
-    # A path this script may replace or remove: a symlink that resolves into
-    # the store, or a directory carrying our .skill-meta marker.
+    # A path this script may replace or remove: a directory carrying our
+    # .skill-meta marker, or a symlink into the store whose target carries it.
+    # A symlink someone else made into ~/.agents/skills is not ours.
     target="$1"
     if [ -L "$target" ]; then
-        case "$(readlink "$target")" in
-            "$STORE"/*|*/.agents/skills/*) return 0 ;;
+        link="$(readlink "$target")"
+        case "$link" in
+            "$STORE"/*) ;;
+            *) return 1 ;;
         esac
-        return 1
+        [ -f "$link/.skill-meta" ] || return 1
+        grep -q "^source=$SOURCE_REPO$" "$link/.skill-meta" 2>/dev/null
+        return $?
     fi
     [ -f "$target/.skill-meta" ] || return 1
     grep -q "^source=$SOURCE_REPO$" "$target/.skill-meta" 2>/dev/null
@@ -221,7 +236,7 @@ ours() {
 
 checksum() {
     # A content checksum of a skill folder, marker excluded.
-    (cd "$1" && find . -type f ! -name .skill-meta | LC_ALL=C sort | while IFS= read -r f; do
+    (cd "$1" && find . -type f ! -name .skill-meta ! -name '*.pyc' ! -path '*/__pycache__/*' | LC_ALL=C sort | while IFS= read -r f; do
         printf '%s\n' "$f"; cat "$f"
     done | cksum | cut -d' ' -f1)
 }
@@ -314,7 +329,8 @@ fetch_source() {
         [ -d "$SRC" ] || die "no such directory: $SRC"
         return 0
     fi
-    TMP="$(mktemp -d 2>/dev/null || mktemp -d -t skills)"
+    TMP="$(mktemp -d 2>/dev/null || mktemp -d "${TMPDIR:-/tmp}/skills.XXXXXX" 2>/dev/null)" || true
+    [ -n "$TMP" ] && [ -d "$TMP" ] || die "could not create a temporary directory (check TMPDIR)"
     trap cleanup EXIT INT TERM
     url="https://codeload.github.com/$SOURCE_REPO/tar.gz/$REF"
     say "Downloading $SOURCE_REPO@$REF ..."
@@ -369,10 +385,12 @@ do_install() {
 
     say "Skills: $(printf '%s\n' "$names" | tr '\n' ' ')"
     say "Store:  $STORE"
+    skipped=""
     for name in $names; do
         sum="$(checksum "$SRC/$name")"
         copy_skill "$SRC/$name" "$STORE/$name" "$sum"
         say "  $name: $ACTION"
+        case "$ACTION" in SKIPPED*) skipped="$skipped $name " ;; esac
     done
 
     rows="$(selected_agents)"
@@ -388,7 +406,10 @@ do_install() {
         for name in $names; do
             sum="$(checksum "$SRC/$name")"
             if [ "$LINK" -eq 1 ] && [ "$SCOPE" = "global" ]; then
-                link_skill "$STORE/$name" "$dir/$name" "$sum"
+                case "$skipped" in
+                    *" $name "*) ACTION="SKIPPED (the store copy was not installed by this script; use --force)" ;;
+                    *) link_skill "$STORE/$name" "$dir/$name" "$sum" ;;
+                esac
             else
                 copy_skill "$SRC/$name" "$dir/$name" "$sum"
             fi
@@ -431,7 +452,8 @@ do_uninstall() {
         say "Done."
         return 0
     fi
-    SELECT="all"
+    limited=0
+    if [ "$SELECT" = "list" ]; then limited=1; else SELECT="all"; fi
     selected_agents | while IFS= read -r row; do
         id="$(field "$row" 1)"
         [ "$id" = "agents" ] && continue
@@ -439,7 +461,11 @@ do_uninstall() {
         [ "$dir" = "$STORE" ] && continue
         remove_ours_in "$dir"
     done
-    remove_ours_in "$STORE"
+    if [ "$limited" -eq 0 ]; then
+        remove_ours_in "$STORE"
+    else
+        say "  kept the shared store $STORE (run --uninstall without --agents to remove it)"
+    fi
     say "Done. Folders without the .skill-meta marker were left alone."
 }
 

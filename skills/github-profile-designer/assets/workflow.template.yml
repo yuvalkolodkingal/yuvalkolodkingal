@@ -1,4 +1,5 @@
 name: Refresh profile
+# engine-path: {{engine}}
 
 # Rebuilds the data-driven panels every day and whenever the config changes.
 # The built-in GITHUB_TOKEN is enough: it reads the public API at 1000

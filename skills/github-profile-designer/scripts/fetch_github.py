@@ -146,11 +146,22 @@ def fetch_languages(session, repos, max_repos=MAX_LANGUAGE_REPOS, cap_share=0.4,
             per_repo.append({name: int(size) for name, size in bytes_by_language.items()})
     totals = {}
     if per_repo:
-        grand_raw = sum(sum(r.values()) for r in per_repo) or 1
-        ceiling = grand_raw * float(cap_share) if 0 < float(cap_share) < 1 else None
-        for languages in per_repo:
-            size = sum(languages.values())
-            scale = min(1.0, ceiling / size) if ceiling and size > ceiling else 1.0
+        cap = float(cap_share)
+        scales = [1.0] * len(per_repo)
+        if 0 < cap < 1 and len(per_repo) > 1:
+            # Shrink oversized repositories until each one is within the cap
+            # of the total that results, which is what the cap promises.
+            sizes = [sum(r.values()) for r in per_repo]
+            for _ in range(60):
+                total = sum(size * scale for size, scale in zip(sizes, scales)) or 1
+                changed = False
+                for index, size in enumerate(sizes):
+                    if size * scales[index] > cap * total + 1:
+                        scales[index] = cap * total / size
+                        changed = True
+                if not changed:
+                    break
+        for languages, scale in zip(per_repo, scales):
             for name, value in languages.items():
                 totals[name] = totals.get(name, 0) + int(value * scale)
     if not totals:  # no token and nothing readable: count primary languages instead

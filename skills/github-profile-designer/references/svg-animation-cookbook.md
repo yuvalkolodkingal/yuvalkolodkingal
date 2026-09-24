@@ -1,41 +1,31 @@
 # SVG animation cookbook
 
-The techniques the renderers use, as snippets you can lift. Every one of
-them works inside an `<img>` on GitHub, which is the whole constraint: no
-script, no external file, CSS only in the file's own `<style>`, and every
-number baked in by Python. Snippets are simplified from the modules named;
-colours are tokyo-night.
+The techniques the renderers use, as snippets to lift. All of them work
+inside an `<img>` on GitHub: no script, no external file, CSS only in the
+file's own `<style>`, every number baked in by Python. Simplified from the
+modules named; tokyo-night colours, 11.5 px font unless shown.
 
 ## The card and title bar
-
-`theme.svg_open`, `theme.card` and `theme.title_bar` draw the window every
-panel sits in:
 
 ```svg
 <svg xmlns="http://www.w3.org/2000/svg" width="860" height="204" viewBox="0 0 860 204"
      role="img" aria-label="git log of milestones: cert: IBM Containers; poster: CalcuLab">
-  <style>/* the panel's animation rules */</style>
   <rect x="0.5" y="0.5" width="859" height="203" rx="10" fill="#1a1b27" stroke="#3b4261" stroke-width="1"/>
   <circle cx="22" cy="21" r="4.5" fill="#ff7a93"/>
   <circle cx="40" cy="21" r="4.5" fill="#e0af68"/>
   <circle cx="58" cy="21" r="4.5" fill="#38bdae"/>
   <text x="430" y="26" text-anchor="middle" font-size="11" fill="#565f89">git log --oneline</text>
   <line x1="12" y1="38" x2="848" y2="38" stroke="#3b4261" stroke-width="1"/>
-  <!-- first text baseline at y=66, left pad 20 -->
 </svg>
 ```
 
-Use it for any panel that is a window. The half-pixel offset keeps the 1 px
-border crisp. Snake, typing and exit skip the bar on purpose: they read as
-output in the page's own terminal, not as another window. Set `width` and
-`height` to the CSS size GitHub will show and put the same numbers in
-`viewBox`, so text is never scaled.
+`theme.svg_open`, `theme.card` and `theme.title_bar`; rows start at
+baseline 66 with a 20 px pad. The half-pixel offset keeps a 1 px border
+crisp; `viewBox` matches `width`/`height` so text is never scaled. Use it
+for every panel that is a window; snake, typing and exit skip the bar so
+they read as output in the page's own terminal.
 
 ## Monospace grid math
-
-Every row is laid out in columns, not pixels: one advance is `font * 0.6`
-(6.9 px at 11.5), a column count is `int((width - 2 * pad) / adv)`, and
-column `n` starts at `pad + n * adv`.
 
 ```svg
 <text x="20" y="66" xml:space="preserve" font-size="11.5"
@@ -44,19 +34,16 @@ column `n` starts at `pad + n * adv`.
 <rect x="130.4" y="56.5" width="6.9" height="13.5" fill="#70a5fd"/>
 ```
 
-Sixteen characters times 6.9 is 110.4, so the cursor sits in column 16.
-`textLength` with `lengthAdjust="spacing"` is what makes that true on every
-machine: the viewer's monospace font is whichever one they have, and without
-it a clip edge or cursor lands mid-glyph on a font with a wider advance.
-`xml:space="preserve"` keeps the doubled spaces in `[  OK  ]` and leading
-indentation. Count emoji as two columns (`render_typing.columns` counts
-anything above U+2500 as two), and avoid them anyway: their width differs
-between fonts and no `textLength` can fix a glyph that is missing.
+One advance is `font * 0.6` (6.9 px), column `n` starts at `pad + n * adv`,
+the column count is `int((width - 2 * pad) / adv)`. Sixteen characters
+times 6.9 is 110.4, so the cursor sits in column 16 on every machine: the
+viewer's font is whichever monospace they have, and without `textLength` +
+`lengthAdjust="spacing"` a clip edge or cursor lands mid-glyph on a wider
+face. `xml:space="preserve"` keeps the doubled spaces in `[  OK  ]`. Emoji
+count as two columns (`render_typing.columns`) and are avoided: their width
+differs by font and `textLength` cannot fix a missing glyph.
 
 ## CSS staggered reveal
-
-The workhorse for cards of rows (info, neofetch, systemctl, finger, stack,
-gitlog, activity, boot):
 
 ```svg
 <style>
@@ -68,19 +55,15 @@ gitlog, activity, boot):
 <g class="r" style="animation-delay:0.31s">...row 2...</g>
 ```
 
-Delay each row 40 to 60 ms after the last so the card prints rather than
-pops, and keep the whole reveal under a second. `forwards` holds the end
-state. The media query must set `opacity:1` and `transform:none` itself,
-because `animation:none` alone leaves the element at its base `opacity:0`.
-`theme.reduced_motion_css(".r")` emits that block. One Chromium quirk:
-`steps(1)` on a fill-forwards fade can leave the last element invisible
-(the end keyframe is never sampled), so boot prints its lines with
-`in .05s linear forwards`, which is short enough to look like a step.
+The workhorse for cards of rows: delay each row 40 to 60 ms after the last
+so the card prints rather than pops, keep the reveal under a second, let
+`forwards` hold the end state. The media query must set `opacity:1` and
+`transform:none` itself, because `animation:none` alone leaves the element
+at its base `opacity:0` (`theme.reduced_motion_css(".r")` emits the block).
+Chromium quirk: `steps(1)` on a fill-forwards fade can leave the last
+element invisible, so boot prints lines with `in .05s linear forwards`.
 
 ## SMIL typewriter: an animated clip
-
-Text that types itself is a clip rectangle whose width grows one advance
-per character; the text underneath never moves. From `render_exit.py`:
 
 ```svg
 <defs><clipPath id="exit-clip">
@@ -99,20 +82,16 @@ per character; the text underneath never moves. From `render_exit.py`:
 </rect>
 ```
 
-`calcMode="discrete"` makes characters appear whole instead of sliding in
-from the left, and `textLength` makes each step land exactly between two
-glyphs. The cursor rect steps through the same x values, then a `<set>`
-hides it a beat after the last character. To play once, use `fill="freeze"`
-as above. To loop (`render_typing.py`), put `repeatCount="indefinite"` on
-each animate and lay the whole cycle out in `values` and `keyTimes`: type,
-hold, erase, then park at 0 until this line's next turn. SMIL has no way to
-loop a group, so every line's animate runs the full cycle and spends most
-of it at zero width.
+`render_exit.py`: the text never moves; a clip rectangle grows one advance
+per character. `calcMode="discrete"` makes characters appear whole,
+`textLength` puts each step between two glyphs, and the cursor steps
+through the same x values until a `<set>` hides it. Play once with
+`fill="freeze"`, as here. To loop (`render_typing.py`), use
+`repeatCount="indefinite"` and lay the whole cycle out in `values` and
+`keyTimes`: type, hold, erase, park at 0 until this line's next turn. SMIL
+cannot loop a group, so each line's animate runs the full cycle alone.
 
 ## Row wipe with a riding cursor
-
-The portrait (`render_portrait.elements`) wipes each row with the same clip
-idea, linear instead of discrete, and a cursor that rides the edge:
 
 ```svg
 <clipPath id="w3"><rect x="14" y="47.6" width="0" height="8.8">
@@ -126,28 +105,21 @@ idea, linear instead of discrete, and a cursor that rides the edge:
 </rect>
 ```
 
-Row `i` begins at `i * 0.045 s`, so 47 rows finish in about 2.5 s. The
-cursor's animations have no `fill="freeze"`, so when they end it snaps
-back to its base `opacity="0"` and disappears. Use this for anything that
-should print once and stay: a picture, a banner, a block of art.
+`render_portrait.elements`: the same clip, linear instead of discrete, with
+a cursor riding the edge. Row `i` begins at `i * 0.045 s`, so 47 rows take
+about 2.5 s; the cursor has no `fill="freeze"`, so it snaps back to its
+base `opacity="0"` when done. Use it for anything that prints once and stays.
 
 ## Reduced motion for SMIL
-
-A media query cannot pause an `<animate>`. Two tricks make it not matter.
-
-For clipped text, override the clip with CSS:
 
 ```css
 @media (prefers-reduced-motion:reduce){.w{clip-path:none}.c{display:none}}
 ```
 
-`clip-path="url(#w3)"` on the element is a presentation attribute, and in
-the cascade any CSS property beats a presentation attribute. So the rule
-removes the clip, the full text shows at once, and the cursors are hidden.
-The animation still runs on a rect that no longer clips anything.
-
-For moving shapes, draw a frozen twin and toggle which one is displayed
-(`theme.still_layer` plus `theme.STILL_CSS`; snake, plate, the systemctl dot):
+A media query cannot pause an `<animate>`, so make it not matter. For
+clipped text: `clip-path="url(#w3)"` on the element is a presentation
+attribute, and a CSS property always beats one in the cascade, so this
+rule shows the full text at once and hides the cursors.
 
 ```svg
 <style>.s{display:none}@media (prefers-reduced-motion:reduce){.m{display:none}.s{display:inline}}</style>
@@ -155,15 +127,13 @@ For moving shapes, draw a frozen twin and toggle which one is displayed
 <g class="s"><!-- the same squares, filled, nothing animated --></g>
 ```
 
-`display` is the safe attribute because no SMIL animation in the file
-touches it and it is not something the browser interpolates, so nothing
-can fight the media query. Emit `STILL_CSS` once per file. The twin only
-needs the elements that move, which is why it costs little.
+For moving shapes, draw a frozen twin and toggle which group is displayed
+(`theme.still_layer` + `theme.STILL_CSS`; snake, plate, the systemctl dot).
+`display` is the safe attribute because no animation touches it and the
+browser never interpolates it, so nothing can fight the media query. Emit
+`STILL_CSS` once per file; the twin holds only what moves.
 
 ## The snake: per-square fill timeline and an interpolated path
-
-Each square with data gets one fill animation over the whole loop
-(`render_snake.py`, 21.7 s for a full year at 45 ms per square):
 
 ```svg
 <rect x="63" y="55" width="12" height="12" rx="2.5" fill="#2f6bbd">
@@ -175,13 +145,11 @@ Each square with data gets one fill animation over the whole loop
 </rect>
 ```
 
-The marks are: hold the heat colour until just before the bite, flash,
-drop to empty just after, stay empty until the regrow wave reaches this
-column (`crawl + week / weeks * regrow`), refill over 0.45 s, hold to the
-end. Every element shares one `dur`, so the loop never drifts apart.
-
-The head is a rect whose x and y step through every square of the path,
-one `keyTime` per square:
+Each square with data gets one fill animation spanning the loop
+(`render_snake.py`, 21.7 s for a year at 45 ms a square): hold the heat
+colour until just before the bite, flash, drop to empty just after, stay
+empty until the regrow wave reaches the column (`crawl + week / weeks *
+regrow`), refill over 0.45 s, hold. One shared `dur` keeps the loop in step.
 
 ```svg
 <rect width="12" height="12" rx="3.33" fill="#f0e0ff" x="-100" y="40" filter="url(#glow)">
@@ -192,17 +160,14 @@ one `keyTime` per square:
 </rect>
 ```
 
-`calcMode` is left at its default, linear, so the head glides between
-centres instead of jumping. Each body segment uses the same list shifted by
-its index (`path[max(i - offset, 0)]`) and a smaller size, so it follows a
-beat behind and the turns read as a snake. The list starts off-canvas
-(a lead-in of six squares) and the last `keyTime` holds the final position
-through the regrow and the pause.
+The head steps through every square of the path, one `keyTime` per square,
+with `calcMode` left linear so it glides between centres. Each body segment
+uses the same list shifted by its index (`path[max(i - offset, 0)]`) at a
+smaller size, so it follows a beat behind and the turns read as a snake.
+The list starts off-canvas and its last `keyTime` holds through the regrow
+and the pause.
 
 ## Glow filter and gradient beam
-
-The head glows; nothing else does, because a filter is per-frame work and
-seven of them are visible on a laptop:
 
 ```svg
 <filter id="glow" x="-80%" y="-80%" width="260%" height="260%">
@@ -211,8 +176,8 @@ seven of them are visible on a laptop:
 </filter>
 ```
 
-The enlarged filter region keeps the blur from being clipped at the
-element's box. The plate's reader beam is a gradient rect that slides once:
+Only the head glows: a filter is per-frame work and seven of them show on a
+laptop. The enlarged region stops the blur being clipped at the box.
 
 ```svg
 <linearGradient id="beam" x1="0" y1="0" x2="1" y2="0">
@@ -226,9 +191,9 @@ element's box. The plate's reader beam is a gradient rect that slides once:
 </rect>
 ```
 
-The opacity envelope stops the beam popping in at the start and parking at
-the far edge forever. Use a beam or a wave whenever a set of elements
-should light up in order and the eye needs to see what is doing it.
+The plate's reader beam slides once; the opacity envelope stops it popping
+in or parking at the far edge. Use a beam or a wave whenever elements light
+up in order and the eye needs to see what is doing it.
 
 ## Blinking block cursor
 
@@ -240,76 +205,52 @@ should light up in order and the eye needs to see what is doing it.
 
 `steps(1)` is right here: a blink has no final frame to lose, and a faded
 blink looks like a breathing light. One advance wide, `font + 2` tall, top
-at `baseline - font + 1`. Put it after a prompt (boot, stack), after the
-pager marker (activity), or at the end of a typed line (exit), never on
-more than one element per panel.
+at `baseline - font + 1`, one per panel: after a prompt, the pager marker
+or a typed line.
 
 ## Deterministic decoration
 
-Numbers that only exist to look real must not change between builds, or
-the daily job commits a diff and the page flickers for nothing. Hash the
-thing they decorate:
-
 ```python
-digest = hashlib.sha256(unit_name.encode("utf-8")).digest()
+digest = hashlib.sha256(unit_name.encode("utf-8")).digest()      # render_systemctl.py
 pid = 1000 + int.from_bytes(digest[0:2], "big") % 60000
 tasks = 4 + digest[2] % 20
 memory = 24 + int.from_bytes(digest[3:5], "big") % 400 + digest[5] % 10 / 10
+short_hash = hashlib.sha1(f"{date}|{subject}".encode("utf-8")).hexdigest()[:7]   # render_gitlog.py
 ```
 
-```python
-hashlib.sha1(f"{date}|{subject}".encode("utf-8")).hexdigest()[:7]   # a gitlog "commit"
-```
-
-The same idea gives boot its rising kernel timestamps from the line index.
-Anything real (uptime, the build stamp, contributions) comes from data;
-anything invented comes from a hash; nothing comes from `random`.
+Numbers that only exist to look real must not change between builds, or
+the daily job commits a diff for nothing, so hash the thing they decorate.
+Boot's kernel timestamps come from the line index the same way. Real
+values come from data, invented ones from a hash, nothing from `random`.
 
 ## ASCII-only text
 
-Text renders in the viewer's system monospace font, and the fallback chain
-ends at plain `monospace`. Any glyph outside ASCII may be missing or a
-different width there. `build.py check` warns on every character above
-U+007E except this set, which the common monospace fonts all carry:
-
-```
-…  ·  ●  └ ─ │ ├ ┌ ┐ ┘ ┬ ┴ ┼  ▁ ▂ ▃ ▄ ▅ ▆ ▇ █  ░ ▒ ▓  → ← ↑ ↓
-```
-
-Use `…` only to mark a truncated value, `·` as a separator in a stamp, and
-the box set for trees and bars. Systemctl draws its status dot as a
-`<circle>` rather than `●` so it can pulse. Run every string through
-`theme.esc` so `<`, `&` and quotes cannot break the XML.
+Text renders in the viewer's system monospace font, so any glyph outside
+ASCII may be missing or a different width. `build.py check` warns on every
+character above U+007E except `… · ●`, the box set
+`└ ─ │ ├ ┌ ┐ ┘ ┬ ┴ ┼`, the blocks `▁ ▂ ▃ ▄ ▅ ▆ ▇ █ ░ ▒ ▓` and the arrows
+`→ ← ↑ ↓`, which the common monospace fonts all carry. Use `…` only to mark
+a truncated value and `·` as a separator in a stamp; systemctl draws its
+dot as a `<circle>` rather than `●` so it can pulse. Run every string
+through `theme.esc` so `<`, `&` and quotes cannot break the XML.
 
 ## File-size discipline
 
 Keep each SVG under about 300 KB (`check` warns above it) and the page
-under 1.5 MB of images. Bytes go where `values` lists go: one animate per
-moving element, with one entry per keyframe. The rules the snake follows:
-
-- Only squares with data get an `<animate>` and a `<title>`; empty squares
-  are plain rects. A year of steady activity is about 140 KB.
-- One shared `dur` and `keyTimes` list per kind of element; round values to
-  two decimals.
-- `from`/`to` when the motion is a straight line, `values` only when it is
-  not.
-- No twin for elements that do not move.
+under 1.5 MB of images. Bytes go where `values` lists go, so animate only
+elements with something to show: the snake gives an `<animate>` and a
+`<title>` to squares with data and leaves empty squares as plain rects,
+which lands a year of steady activity at about 140 KB. Share one `dur` and
+`keyTimes` list per kind of element, round to two decimals, use `from`/`to`
+for straight lines and `values` only when the path bends, and give a still
+twin only to what moves.
 
 ## Testing
-
-Parse before writing, so a broken file never reaches the repository:
 
 ```python
 import xml.etree.ElementTree as ET
 ET.fromstring(svg)   # render_all does this; a ParseError stops the build
 ```
-
-Then look at it in headless Chromium with Playwright, two ways. For the
-GitHub view, load the file through an `<img>` with a `data:` URL and
-screenshot the element at two times: around 100 ms (mid-animation, to see
-that it moves) and after the longest delay, 3 to 5 s (settled, to see the
-state a reader lands on). For reduced motion, inline the SVG markup in the
-page instead:
 
 ```js
 const ctx = await browser.newContext({ reducedMotion: 'reduce', colorScheme: 'dark' });
@@ -321,10 +262,15 @@ const shown = await page.evaluate(() =>
   [...document.querySelectorAll('g.r')].filter(g => getComputedStyle(g).opacity === '1').length);
 ```
 
-An SVG inside `<img>` is its own document and does not receive the
-emulated media features, so through `<img>` the reduced test would pass
+Parse before writing so a broken file never reaches the repository, then
+look at it in headless Chromium with Playwright. For the GitHub view, load
+the file through an `<img>` with a `data:` URL and screenshot at two times:
+about 100 ms (mid-animation, to see it move) and after the longest delay,
+3 to 5 s (settled, the state a reader lands on). For reduced motion, inline
+the markup as above: an SVG inside `<img>` is its own document and does not
+receive the emulated media features, so through `<img>` the test passes
 without testing anything. Inline, every row should report opacity 1 at
-100 ms and the still layer should be the one on screen. Finish with
+100 ms and the still layer should be on screen. Finish with
 `build.py check --strict`, which also catches `<script>`,
-`<foreignObject>`, external URLs, an animated file with no
+`<foreignObject>`, external URLs, animation without a
 `prefers-reduced-motion` rule, odd glyphs and oversized files.
