@@ -1,29 +1,16 @@
-#!/usr/bin/env python3
-"""Render the contribution calendar with a snake eating its way across it.
+"""The contribution calendar with a snake eating its way across it.
 
 This is the whole graph, not an extra panel next to one: month labels, day
 labels, the legend and the stats footer, with a snake crawling the squares in
 a serpentine. Every square it reaches flashes and drops to empty. Once it
 leaves the far side the calendar regrows in a wave from the left and the run
-starts over.
-
-The snake glides between squares rather than jumping, and the body follows the
-head a beat behind, so the turns read as a real snake rather than a marching
-block.
-
-Usage:
-    python scripts/render_snake_svg.py
+starts over. The snake glides between squares rather than jumping, and the
+body follows the head a beat behind, so the turns read as a real snake.
 """
 
-import json
 from datetime import date
-from pathlib import Path
 
-from theme import DIM, FG, HEAT, MONO, card, esc
-
-ROOT = Path(__file__).resolve().parent.parent
-DATA = ROOT / "data" / "contributions.json"
-OUT = ROOT / "assets" / "snake.svg"
+from theme import MONO, STILL_CSS, card, esc, svg_open
 
 CELL = 12
 GAP = 3
@@ -33,34 +20,23 @@ LABEL_W = 30
 GRID_X = PAD_L + LABEL_W
 GRID_Y = 40
 GRID_H = 7 * PITCH - GAP
-WIDTH = 860
 
 MONTHS = "Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec".split()
 
-STEP = 0.045       # seconds per square
-REGROW = 3.2       # the calendar growing back once the snake has gone
-PAUSE = 1.0        # a beat before it all starts again
-LEAD_IN = 6        # squares of run-up before the first column
-
-# Head first, then the body tapering back to the tail. Purple rather than
-# blue, so the snake reads against the squares it is eating.
-SNAKE = [
-    ("#f0e0ff", 12.0),
-    ("#e6ccff", 11.5),
-    ("#bf91f3", 11.0),
-    ("#ab7ce8", 10.0),
-    ("#9668d8", 9.0),
-    ("#8455c4", 8.0),
-    ("#6a43a0", 7.0),
-]
-FLASH = "#f0e0ff"
+DEFAULTS = {
+    "step": 0.045,    # seconds per square
+    "regrow": 3.2,    # the calendar growing back once the snake has gone
+    "pause": 1.0,     # a beat before it all starts again
+    "lead_in": 6,     # squares of run-up before the first column
+    "footer": True,
+    "cached_note": "",  # e.g. "2026-09-01" when the calendar could not be refreshed
+}
 
 
 def to_columns(days):
     """Group days into week columns, Sunday first (GitHub's layout)."""
     columns, current = [], []
     for day in days:
-        # weekday() is Monday=0..Sunday=6. GitHub rows: Sunday=0..Saturday=6.
         row = (date.fromisoformat(day["date"]).weekday() + 1) % 7
         if row == 0 and current:
             columns.append(current)
@@ -105,7 +81,13 @@ def serpentine(count):
     return path
 
 
-def render(payload):
+def render(theme, config, payload, width=860):
+    opts = {**DEFAULTS, **{k: v for k, v in config.items() if k in DEFAULTS}}
+    step, regrow, pause, lead_in = opts["step"], opts["regrow"], opts["pause"], int(opts["lead_in"])
+    heat = theme.heat
+    snake = theme.snake
+    flash = theme.flash
+
     days = payload.get("days", [])
     stats = payload.get("stats", {})
     columns = to_columns(days)
@@ -114,85 +96,76 @@ def render(payload):
 
     legend_y = GRID_Y + GRID_H + 26
     footer_y = legend_y + 28
-    height = footer_y + 18
+    height = footer_y + 18 if opts["footer"] else legend_y + 24
 
-    # Run-up on the left and run-out on the right, so the snake enters and
-    # leaves instead of popping into existence mid-grid. The run-out has to be
-    # longer than the snake, or the tail parks on the canvas during the regrow
-    # instead of following the head off the edge.
-    lead_out = len(SNAKE) + 5
-    path = [(-LEAD_IN + offset, 0) for offset in range(LEAD_IN)]
+    lead_out = len(snake) + 5
+    path = [(-lead_in + offset, 0) for offset in range(lead_in)]
     path += serpentine(weeks)
     path += [(weeks + offset, path[-1][1]) for offset in range(lead_out)]
 
-    crawl = len(path) * STEP
-    total = crawl + REGROW + PAUSE
+    crawl = len(path) * step
+    total = crawl + regrow + pause
     eaten_at = {cell: index for index, cell in enumerate(path)}
 
     def fraction(seconds):
         return min(max(seconds / total, 0.0), 1.0)
 
+    label = f"Contribution calendar for the last year with a snake eating the active days; {payload.get('total', 0)} contributions"
     out = [
-        f'<svg xmlns="http://www.w3.org/2000/svg" width="{WIDTH}" '
-        f'height="{height}" viewBox="0 0 {WIDTH} {height}" role="img" '
-        f'aria-label="{esc(payload.get("total", 0))} contributions in the last '
-        f'year, with a snake eating the graph">',
+        svg_open(width, height, label),
+        f"<style>{STILL_CSS}</style>",
         "<defs>"
         '<filter id="glow" x="-80%" y="-80%" width="260%" height="260%">'
         '<feGaussianBlur stdDeviation="2.6" result="b"/>'
         '<feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/>'
         "</feMerge></filter></defs>",
-        card(WIDTH, height),
+        card(theme, width, height),
     ]
 
     for index, name in month_labels(columns):
         out.append(
             f'<text x="{GRID_X + index * PITCH}" y="30" font-family="{MONO}" '
-            f'font-size="10" fill="{DIM}">{name}</text>'
+            f'font-size="10" fill="{theme.dim}">{name}</text>'
         )
-
     for row, name in ((1, "Mon"), (3, "Wed"), (5, "Fri")):
         out.append(
             f'<text x="{GRID_X - 8}" y="{GRID_Y + row * PITCH + CELL - 2}" '
             f'text-anchor="end" font-family="{MONO}" font-size="10" '
-            f'fill="{DIM}">{name}</text>'
+            f'fill="{theme.dim}">{name}</text>'
         )
 
-    # Squares. Only the ones with contributions animate, so a quiet year stays
-    # a small file.
-    snap = 0.55 * STEP
+    snap = 0.55 * step
+    motion, still = [], []
     for week, column in enumerate(columns):
         for row, day in enumerate(column):
             x = GRID_X + week * PITCH
             y = GRID_Y + row * PITCH
-            level = 0 if day is None else min(int(day.get("level", 0)), len(HEAT) - 1)
+            level = 0 if day is None else min(int(day.get("level", 0)), len(heat) - 1)
             rect = (
                 f'<rect x="{x}" y="{y}" width="{CELL}" height="{CELL}" rx="2.5" '
-                f'fill="{HEAT[level]}"'
+                f'fill="{heat[level]}"'
             )
             if level == 0:
                 out.append(rect + "/>")
                 continue
+            still.append(rect + "/>")
 
-            bite = eaten_at[(week, row)] * STEP
-            back = crawl + (week / max(weeks - 1, 1)) * REGROW
+            bite = eaten_at[(week, row)] * step
+            back = crawl + (week / max(weeks - 1, 1)) * regrow
             count = day["count"]
             plural = "" if count == 1 else "s"
-
-            # Hold the colour, flash white as the head arrives, drop to empty,
-            # then fade back in on the regrow wave.
             marks = [
-                (0.0, HEAT[level]),
-                (bite - snap, HEAT[level]),
-                (bite, FLASH),
-                (bite + snap, HEAT[0]),
-                (back, HEAT[0]),
-                (min(back + 0.45, total), HEAT[level]),
-                (total, HEAT[level]),
+                (0.0, heat[level]),
+                (bite - snap, heat[level]),
+                (bite, flash),
+                (bite + snap, heat[0]),
+                (back, heat[0]),
+                (min(back + 0.45, total), heat[level]),
+                (total, heat[level]),
             ]
             values = ";".join(colour for _, colour in marks)
             keys = ";".join(f"{fraction(when):.5f}" for when, _ in marks)
-            out.append(
+            motion.append(
                 rect + ">"
                 f'<animate attributeName="fill" values="{values}" '
                 f'keyTimes="{keys}" dur="{total:.2f}s" repeatCount="indefinite"/>'
@@ -200,13 +173,9 @@ def render(payload):
                 f"</rect>"
             )
 
-    # The snake. Each segment replays the head's path a beat behind, and the
-    # motion interpolates between squares instead of stepping, which is what
-    # makes it look alive on the turns.
-    stops = [fraction(index * STEP) for index in range(len(path))] + [1.0]
+    stops = [fraction(index * step) for index in range(len(path))] + [1.0]
     keys = ";".join(f"{stop:.5f}" for stop in stops)
-
-    for offset, (colour, size) in enumerate(SNAKE):
+    for offset, (colour, size) in enumerate(snake):
         nudge = (CELL - size) / 2
         xs, ys = [], []
         for index in range(len(path)):
@@ -215,9 +184,8 @@ def render(payload):
             ys.append(f"{GRID_Y + row * PITCH + nudge:.2f}")
         xs.append(xs[-1])
         ys.append(ys[-1])
-
         head = ' filter="url(#glow)"' if offset == 0 else ""
-        out.append(
+        motion.append(
             f'<rect width="{size}" height="{size}" rx="{size / 3.6:.2f}" '
             f'fill="{colour}" x="-100" y="{GRID_Y}"{head}>'
             f'<animate attributeName="x" values="{";".join(xs)}" '
@@ -227,48 +195,39 @@ def render(payload):
             f"</rect>"
         )
 
-    legend_w = len(HEAT) * (CELL + 4) - 4
+    out.append(f'<g class="m">{"".join(motion)}</g><g class="s">{"".join(still)}</g>')
+
+    legend_w = len(heat) * (CELL + 4) - 4
     right = GRID_X + grid_w
     swatch_x = right - 34 - legend_w
     baseline = legend_y + CELL - 2
-
     out.append(
         f'<text x="{swatch_x - 10}" y="{baseline}" text-anchor="end" '
-        f'font-family="{MONO}" font-size="10" fill="{DIM}">Less</text>'
+        f'font-family="{MONO}" font-size="10" fill="{theme.dim}">Less</text>'
     )
-    for step, colour in enumerate(HEAT):
+    for index, colour in enumerate(heat):
         out.append(
-            f'<rect x="{swatch_x + step * (CELL + 4)}" y="{legend_y}" '
+            f'<rect x="{swatch_x + index * (CELL + 4)}" y="{legend_y}" '
             f'width="{CELL}" height="{CELL}" rx="2.5" fill="{colour}"/>'
         )
     out.append(
         f'<text x="{right}" y="{baseline}" text-anchor="end" '
-        f'font-family="{MONO}" font-size="10" fill="{DIM}">More</text>'
+        f'font-family="{MONO}" font-size="10" fill="{theme.dim}">More</text>'
     )
 
-    footer = (
-        f"{payload.get('total', 0):,} contributions in the last year"
-        f"   ·   current streak {stats.get('current_streak', 0)}d"
-        f"   ·   longest {stats.get('longest_streak', 0)}d"
-        f"   ·   best day {human_date(stats.get('best_day'))}"
-        f" ({stats.get('best_day_count', 0)})"
-    )
-    out.append(
-        f'<text x="{PAD_L}" y="{footer_y}" font-family="{MONO}" font-size="11" '
-        f'fill="{FG}">{esc(footer)}</text>'
-    )
+    if opts["footer"]:
+        footer = (
+            f"{payload.get('total', 0):,} contributions in the last year"
+            f"  |  streak {stats.get('current_streak', 0)}d (longest {stats.get('longest_streak', 0)}d)"
+            f"  |  best {human_date(stats.get('best_day'))} ({stats.get('best_day_count', 0)})"
+        )
+        note = ""
+        if opts.get("cached_note"):
+            note = f'<tspan fill="{theme.dim}">  (cached {esc(opts["cached_note"])})</tspan>'
+        out.append(
+            f'<text x="{PAD_L}" y="{footer_y}" font-family="{MONO}" font-size="11" '
+            f'fill="{theme.fg}">{esc(footer)}{note}</text>'
+        )
 
     out.append("</svg>")
     return "\n".join(out) + "\n", total
-
-
-def main():
-    payload = json.loads(DATA.read_text(encoding="utf-8"))
-    svg, total = render(payload)
-    OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(svg, encoding="utf-8")
-    print(f"{OUT}: {total:.1f}s loop")
-
-
-if __name__ == "__main__":
-    main()

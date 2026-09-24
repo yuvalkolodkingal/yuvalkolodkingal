@@ -1,0 +1,5 @@
+requests==2.32.3
+beautifulsoup4==4.12.3
+
+# Only for [portrait] mode = "image". The daily workflow never needs these.
+#   pip install pillow numpy opencv-python rembg

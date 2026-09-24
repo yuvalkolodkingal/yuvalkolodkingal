@@ -1,0 +1,113 @@
+# profile.toml: everything on the profile page comes from this file.
+# Run `python <engine>/build.py all` after editing. Full schema:
+# references/profile-schema.md. Omit a section to leave that panel out.
+
+[profile]
+username = "{{username}}"       # GitHub login (required)
+name = "{{name}}"               # display name
+user = "{{user}}"               # the user in every prompt: user@host:~$
+host = "github"                 # the host in every prompt: a lab, a company, a project
+
+[theme]
+dark = "{{palette}}"            # see `build.py themes`
+light = ""                      # "" = one dark render; "auto" = light twin via <picture>
+width = 860
+
+[data]
+exclude_repos = ["{{username}}/{{username}}"]
+cap_share = 0.4                 # no single repository over 40% of the language bytes
+
+# --- hero ---------------------------------------------------------------------
+# The machine boots. Lines print in order; kind is "kernel", "ok", "info" or "fail".
+[boot]
+kernel = "6.1.0-{{user}}"
+lines = [
+  { kind = "kernel", text = "Linux version {kernel} ({{user}}@github) #1 SMP" },
+  { kind = "ok", text = "Reached target basic.target - Basic System." },
+  { kind = "ok", text = "Started {{user}}.service - What I work on, in one line." },
+  { kind = "ok", text = "Reached target multi-user.target - Multi-User System." },
+]
+
+# --- neofetch: portrait + facts ----------------------------------------------
+[portrait]
+mode = "helix"                  # helix | image | text (image: source = "source-prepped.png")
+title = "./portrait.sh"
+
+[neofetch]
+# {placeholders} are filled by the daily build: {uptime} {repos} {stars} {followers}
+# {contributions} {streak} {longest_streak} {active_days} {top_language} {languages}
+rows = [
+  { key = "OS", value = "What I do, where" },
+  { key = "Host", value = "Where I study or work" },
+  { key = "Kernel", value = "My focus, in a few words", color = "teal" },
+  { key = "Uptime", value = "{uptime}" },
+  { key = "Packages", value = "{repos} (repos)" },
+  { key = "Shell", value = "python 3, node 22" },
+  { key = "DE", value = "Tokyo Night" },
+  { key = "Terminal", value = "GitHub README" },
+  { key = "Memory", value = "{contributions} contributions / 365 days" },
+  { key = "Top", value = "{top_language}" },
+  { key = "Locale", value = "City, Country" },
+  { key = "Contact", value = "linkedin.com/in/{{user}}", color = "blue" },
+]
+
+# --- the calendar --------------------------------------------------------------
+[snake]
+
+# The 96-well plate: enable it if you work in a lab.
+[plate]
+enabled = false
+
+# --- the flagship project as a systemd unit ------------------------------------
+[systemctl]
+title = "systemctl status project.service"
+
+[[projects]]
+name = "project"
+label = "project.example"
+description = "One line on what it does"
+url = "https://project.example/"
+docs = "https://project.example/docs"
+# since = "2025-01-15"          # only if you know the real date
+lines = [
+  "Started project.service - One line on what it does",
+]
+
+# --- what is on the machine -----------------------------------------------------
+[stack]
+groups = [
+  { name = "languages", items = ["Python", "TypeScript"] },
+  { name = "frontend", items = ["React"] },
+  { name = "backend", items = ["FastAPI", "PostgreSQL"] },
+  { name = "infra", items = ["Docker", "Linux", "Git"] },
+]
+
+# --- milestones as a git log ------------------------------------------------------
+[gitlog]
+
+[[timeline]]
+date = "2026-01"
+subject = "feat: shipped the first version"
+tag = "v1.0.0"
+
+[[timeline]]
+date = ""                       # leave empty when you do not know the date
+subject = "init: started at ..."
+
+# --- contact -----------------------------------------------------------------------
+[finger]
+office = "Where you can be found"
+mail = "you@example.com"
+site = "https://example.com/"
+plan = [
+  "What you are working on, in one or two lines.",
+]
+links = [
+  { label = "Email", url = "mailto:you@example.com" },
+  { label = "Website", url = "https://example.com/" },
+]
+
+# --- the way out ----------------------------------------------------------------------
+[exit]
+farewell = "Connection to {host} closed."
+show_build = true

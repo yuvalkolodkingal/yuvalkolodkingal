@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Scrape the public contribution calendar into data/contributions.json.
+"""Scrape the public contribution calendar into a JSON cache.
 
 GitHub serves the calendar as a plain HTML fragment at
 https://github.com/users/<username>/contributions, the same markup the
@@ -7,7 +7,7 @@ profile page itself renders. It is public, so this needs no GraphQL API and
 no personal access token.
 
 Usage:
-    python scripts/fetch_contributions.py [username]
+    python fetch_contributions.py <username> [data/contributions.json]
 """
 
 import json
@@ -20,9 +20,7 @@ from pathlib import Path
 import requests
 from bs4 import BeautifulSoup
 
-USERNAME = "yuvalkolodkingal"
 URL = "https://github.com/users/{user}/contributions"
-OUT = Path(__file__).resolve().parent.parent / "data" / "contributions.json"
 
 # "No contributions on January 1st." / "12 contributions on March 3rd."
 COUNT_RE = re.compile(r"^\s*(No|[\d,]+)\s+contribution")
@@ -112,7 +110,7 @@ def streaks(days):
     return current, longest
 
 
-def summarise(days, total):
+def summarise(days, total, username=""):
     best = max(days, key=lambda day: day["count"]) if days else {"date": None, "count": 0}
     months = {}
     for day in days:
@@ -122,7 +120,7 @@ def summarise(days, total):
     active = sum(1 for day in days if day["count"] > 0)
 
     return {
-        "username": USERNAME,
+        "username": username,
         "generated": date.today().isoformat(),
         "total": total,
         "days": days,
@@ -137,7 +135,7 @@ def summarise(days, total):
     }
 
 
-def empty_calendar():
+def empty_calendar(username=""):
     """A blank 53-week grid, used only if the scrape fails and no cache exists.
 
     The daily workflow overwrites this with real data on its first run, so it
@@ -151,37 +149,53 @@ def empty_calendar():
         {"date": (start + timedelta(days=offset)).isoformat(), "count": 0, "level": 0}
         for offset in range((end - start).days + 1)
     ]
-    return summarise(days, 0)
+    return summarise(days, 0, username)
 
 
-def main():
-    user = sys.argv[1] if len(sys.argv) > 1 else os.environ.get("GH_USERNAME", USERNAME)
+LAST_STATUS = {"status": "fresh", "error": ""}
 
+
+def fetch(user, out):
+    """Scrape and write out; on failure keep the existing file or write a blank grid.
+
+    Returns the payload that is now on disk. LAST_STATUS says whether it is
+    fresh, cached (kept from a previous run) or empty (a placeholder grid).
+    """
+    out = Path(out)
     try:
         html = fetch_html(user)
         days = parse_days(html)
         if not days:
             raise ValueError("no contribution cells found in the response")
-        payload = summarise(days, parse_total(html, days))
+        payload = summarise(days, parse_total(html, days), user)
+        LAST_STATUS.update(status="fresh", error="")
     except Exception as error:  # network down, markup changed, rate limited
         print(f"warning: could not fetch contributions for {user}: {error}")
-        if OUT.exists():
-            print(f"keeping the existing {OUT.name}")
-            return 0
+        if out.exists():
+            print(f"keeping the existing {out.name}")
+            LAST_STATUS.update(status="cached", error=str(error))
+            return json.loads(out.read_text(encoding="utf-8"))
         print("writing an empty calendar as a placeholder")
-        payload = empty_calendar()
+        LAST_STATUS.update(status="empty", error=str(error))
+        payload = empty_calendar(user)
 
-    payload["username"] = user
-    OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(json.dumps(payload, indent=1) + "\n", encoding="utf-8")
-
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(payload, indent=1) + "\n", encoding="utf-8")
     stats = payload["stats"]
     print(
-        f"{OUT}: {payload['total']} contributions, "
-        f"{len(payload['days'])} days, "
-        f"current streak {stats['current_streak']}, "
-        f"longest {stats['longest_streak']}"
+        f"{out}: {payload['total']} contributions, {len(payload['days'])} days, "
+        f"current streak {stats['current_streak']}, longest {stats['longest_streak']}"
     )
+    return payload
+
+
+def main():
+    user = sys.argv[1] if len(sys.argv) > 1 else os.environ.get("GH_USERNAME")
+    if not user:
+        print("usage: fetch_contributions.py <username> [out.json]")
+        return 2
+    out = sys.argv[2] if len(sys.argv) > 2 else "data/contributions.json"
+    fetch(user, out)
     return 0
 
 

@@ -1,4 +1,12 @@
-name: Update profile art
+name: Refresh profile
+
+# Rebuilds the data-driven panels every day and whenever the config or the
+# engine changes. The built-in GITHUB_TOKEN is enough: it reads the public
+# API at 1000 requests an hour, and `contents: write` lets the job commit.
+#
+# The refresh commit is authored by github-actions[bot] on purpose, so the
+# daily job does not paint the contribution graph it is drawing. Pushes made
+# with GITHUB_TOKEN never trigger other workflows, so no [skip ci] is needed.
 
 "on":
   schedule:
@@ -6,6 +14,10 @@ name: Update profile art
   workflow_dispatch: {}
   push:
     branches: [main]
+    paths:
+      - "profile.toml"
+      - "skills/github-profile-designer/scripts/**"
+      - ".github/workflows/update-profile-art.yml"
 
 permissions:
   contents: write
@@ -15,7 +27,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  heatmap:
+  refresh:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -24,17 +36,17 @@ jobs:
         with:
           python-version: "3.11"
           cache: pip
-          cache-dependency-path: scripts/requirements.txt
+          cache-dependency-path: skills/github-profile-designer/scripts/requirements.txt
 
-      - run: pip install -r scripts/requirements.txt
+      - run: pip install -r skills/github-profile-designer/scripts/requirements.txt
 
-      - name: Scrape the contribution calendar
-        run: python scripts/fetch_contributions.py
-
-      - name: Render the graph
-        run: python scripts/render_snake_svg.py
+      - name: Fetch data, render panels, update README blocks, check
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python skills/github-profile-designer/scripts/build.py all
 
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "chore: refresh contribution graph [skip ci]"
-          file_pattern: "data/contributions.json assets/snake.svg"
+          commit_message: "chore: refresh profile data"
+          commit_author: "github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>"
+          file_pattern: "data/*.json assets/*.svg README.md"
