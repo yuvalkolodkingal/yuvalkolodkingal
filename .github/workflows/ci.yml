@@ -5,9 +5,9 @@ name: CI
 # lint and survive a dry run, and a fresh profile must build from the skill.
 
 "on":
-  pull_request: {}
   push:
     branches-ignore: [main]
+  workflow_dispatch: {}
 
 permissions:
   contents: read
@@ -23,6 +23,8 @@ jobs:
       - run: pip install -r skills/github-profile-designer/scripts/requirements.txt
       - name: Config, assets and README pass the checks
         run: python skills/github-profile-designer/scripts/build.py check --strict
+      - name: Profile review checker audits the committed page
+        run: python skills/github-profile-review/scripts/check_readme.py README.md --fetch-images
       - name: Panels render offline from profile.toml
         run: python skills/github-profile-designer/scripts/build.py render --static
       - name: A new profile scaffolds and builds from the skill
@@ -30,8 +32,6 @@ jobs:
           mkdir -p /tmp/fresh && cd /tmp/fresh
           python "$GITHUB_WORKSPACE/skills/github-profile-designer/scripts/build.py" init --username octocat --name "Mona"
           python "$GITHUB_WORKSPACE/skills/github-profile-designer/scripts/build.py" all --no-fetch
-      - name: Profile review checker runs on the page
-        run: python skills/github-profile-review/scripts/check_readme.py README.md --fetch-images
       - name: Installer lints and dry-runs
         run: |
           sudo apt-get install -y -qq shellcheck dash >/dev/null

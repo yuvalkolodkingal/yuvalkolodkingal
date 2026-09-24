@@ -330,7 +330,9 @@ fetch_source() {
         return 0
     fi
     TMP="$(mktemp -d 2>/dev/null || mktemp -d "${TMPDIR:-/tmp}/skills.XXXXXX" 2>/dev/null)" || true
-    [ -n "$TMP" ] && [ -d "$TMP" ] || die "could not create a temporary directory (check TMPDIR)"
+    if [ -z "$TMP" ] || [ ! -d "$TMP" ]; then
+        die "could not create a temporary directory (check TMPDIR)"
+    fi
     trap cleanup EXIT INT TERM
     url="https://codeload.github.com/$SOURCE_REPO/tar.gz/$REF"
     say "Downloading $SOURCE_REPO@$REF ..."
