@@ -280,20 +280,31 @@ class Build:
             return ""
         return f"### `{self.prompt()} {self.expand(command)}`\n\n"
 
-    def image_html(self, name, alt, width=None):
+    def image_html(self, name, alt, width=None, align=""):
         width = width or self.width
         alt = html.escape(alt, quote=True)
         rel = self.config["paths"]["assets"]
+        attrs = f' align="{align}"' if align else ""
         if self.light:
             dark, light = f"./{rel}/{name}-dark.svg", f"./{rel}/{name}-light.svg"
             return (
                 "<picture>\n"
                 f'  <source media="(prefers-color-scheme: dark)" srcset="{dark}">\n'
                 f'  <source media="(prefers-color-scheme: light)" srcset="{light}">\n'
-                f'  <img src="{dark}" width="{width}" alt="{alt}">\n'
+                f'  <img src="{dark}" width="{width}" alt="{alt}"{attrs}>\n'
                 "</picture>"
             )
-        return f'<img src="./{rel}/{name}.svg" width="{width}" alt="{alt}">'
+        return f'<img src="./{rel}/{name}.svg" width="{width}" alt="{alt}"{attrs}>'
+
+    def side_by_side(self, images):
+        """Two panels on one row: adjacent inline images, no table.
+
+        A table adds GitHub's cell padding and borders, so it comes out wider
+        than the single panels and scrolls on phones; adjacent images sum to
+        the page width exactly and wrap when the screen is narrow. align="top"
+        (an attribute GitHub keeps) lines up the cards' top edges.
+        """
+        return "<p>\n" + "".join(images) + "\n</p>"
 
     def alt(self, panel, default):
         return self.section(panel).get("alt") or default
@@ -313,10 +324,10 @@ class Build:
         elif self.on("portrait") or self.on("info"):
             cells = []
             if self.on("portrait"):
-                cells.append(f'<td valign="top">{self.image_html("portrait", self.alt("portrait", "ASCII art portrait"), self.section("portrait").get("width", 370))}</td>')
+                cells.append(self.image_html("portrait", self.alt("portrait", "ASCII art portrait"), self.section("portrait").get("width", 370), align="top"))
             if self.on("info"):
-                cells.append(f'<td valign="top">{self.image_html("info", self.alt("info", "Info card listing role, stack, location and contact"), self.section("info").get("width", 490))}</td>')
-            b["whoami"] = self.heading("whoami", self.section("info") or self.section("portrait")) + "<table>\n  <tr>\n    " + "\n    ".join(cells) + "\n  </tr>\n</table>"
+                cells.append(self.image_html("info", self.alt("info", "Info card listing role, stack, location and contact"), self.section("info").get("width", 490), align="top"))
+            b["whoami"] = self.heading("whoami", self.section("info") or self.section("portrait")) + self.side_by_side(cells)
         if self.on("snake"):
             total = self.contributions.get("total", 0)
             b["snake"] = self.heading("snake") + self.image_html(
@@ -324,11 +335,10 @@ class Build:
         have_plate = self.on("plate")
         have_units = self.on_with("systemctl", "projects")
         if have_plate and have_units:
-            b["lab"] = self.heading("lab", self.section("systemctl")) + (
-                "<table>\n  <tr>\n"
-                f'    <td valign="top">{self.image_html("plate", self.alt("plate", "96-well plate: the last 96 days of contributions, one well per day"), self.section("plate").get("width", 370))}</td>\n'
-                f'    <td valign="top">{self.image_html("systemctl", self.alt("systemctl", "systemctl status of the flagship project"), self.section("systemctl").get("width", 490))}</td>\n'
-                "  </tr>\n</table>" + self.project_links())
+            b["lab"] = self.heading("lab", self.section("systemctl")) + self.side_by_side([
+                self.image_html("plate", self.alt("plate", "96-well plate: the last 96 days of contributions, one well per day"), self.section("plate").get("width", 370), align="top"),
+                self.image_html("systemctl", self.alt("systemctl", "systemctl status of the flagship project"), self.section("systemctl").get("width", 490), align="top"),
+            ]) + self.project_links()
         elif have_plate:
             b["plate"] = self.heading("plate") + self.image_html("plate", self.alt("plate", "96-well plate: the last 96 days of contributions, one well per day"), self.section("plate").get("width", 370))
         elif have_units:

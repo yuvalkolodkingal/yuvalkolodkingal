@@ -162,7 +162,10 @@ def _unit(project, github, now):
             f"{MONTHS[now.month - 1]} {now.day:2d} {now.hour:02d}:{now.minute:02d}:{seconds:02d} "
             f"__HOST__ {short}[{pid}]: "
         )
-        lines.append((prefix, str(line)))
+        # journalctl's short-precise style for narrow cards, so the message
+        # keeps most of its width.
+        compact = f"{now.hour:02d}:{now.minute:02d}:{seconds:02d} {short}[{pid}]: "
+        lines.append((prefix, compact, str(line)))
 
     return {
         "unit": unit,
@@ -328,8 +331,10 @@ def render(theme, config, ctx, width=860, static=False):
 
         if unit["lines"]:
             rows.append(None)
-        for prefix, message in unit["lines"]:
-            prefix = prefix.replace("__HOST__", host)
+        for full, compact, message in unit["lines"]:
+            prefix = full.replace("__HOST__", host)
+            if columns - len(prefix) < 44:
+                prefix = compact
             room = columns - len(prefix)
             rows.append(
                 node(pad, prefix, theme.dim, fixed=True)

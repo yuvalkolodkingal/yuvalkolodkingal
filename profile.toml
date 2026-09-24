@@ -81,9 +81,9 @@ description = "Molecular biology calculators"
 url = "https://www.calculab.bio/"
 docs = "https://www.calculab.bio/"
 lines = [
-  "Started calculab.service - Molecular biology and biochemistry calculators",
-  "Presented as a poster at FISEB / ILANIT 2026, Eilat, station 58",
-  "Built with Avichay Nahami at the Scojen Institute",
+  "Started calculab.service.",
+  "poster: FISEB / ILANIT 2026, Eilat, station 58",
+  "built with Avichay Nahami, Scojen Institute",
 ]
 links = [
   { label = "built with Avichay Nahami", url = "https://www.linkedin.com/in/avichay-nahami-48765a22b/" },
