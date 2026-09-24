@@ -146,10 +146,10 @@ browser never interpolates it, so nothing can fight the media query. Emit
 ```
 
 Each square with data gets one fill animation spanning the loop
-(`render_snake.py`, 21.7 s for a year at 45 ms a square): hold the heat
-colour until just before the bite, flash, drop to empty just after, stay
-empty until the regrow wave reaches the column (`crawl + week / weeks *
-regrow`), refill over 0.45 s, hold. One shared `dur` keeps the loop in step.
+(`render_snake.py`, 21.7 s for a year at 45 ms a square): hold until just
+before the bite, flash, drop to empty, stay empty until the regrow wave
+reaches the column (`crawl + week / weeks * regrow`), refill over 0.45 s,
+hold. One shared `dur` keeps every element in step.
 
 ```svg
 <rect width="12" height="12" rx="3.33" fill="#f0e0ff" x="-100" y="40" filter="url(#glow)">
@@ -163,9 +163,8 @@ regrow`), refill over 0.45 s, hold. One shared `dur` keeps the loop in step.
 The head steps through every square of the path, one `keyTime` per square,
 with `calcMode` left linear so it glides between centres. Each body segment
 uses the same list shifted by its index (`path[max(i - offset, 0)]`) at a
-smaller size, so it follows a beat behind and the turns read as a snake.
-The list starts off-canvas and its last `keyTime` holds through the regrow
-and the pause.
+smaller size, so it follows a beat behind and the turns read as a snake;
+the last `keyTime` holds through the regrow and the pause.
 
 ## Glow filter and gradient beam
 
@@ -192,8 +191,8 @@ laptop. The enlarged region stops the blur being clipped at the box.
 ```
 
 The plate's reader beam slides once; the opacity envelope stops it popping
-in or parking at the far edge. Use a beam or a wave whenever elements light
-up in order and the eye needs to see what is doing it.
+in or parking at the far edge. Use a beam whenever elements light up in
+order and the eye needs to see what is doing it.
 
 ## Blinking block cursor
 
@@ -204,9 +203,8 @@ up in order and the eye needs to see what is doing it.
 ```
 
 `steps(1)` is right here: a blink has no final frame to lose, and a faded
-blink looks like a breathing light. One advance wide, `font + 2` tall, top
-at `baseline - font + 1`, one per panel: after a prompt, the pager marker
-or a typed line.
+blink looks like a breathing light. One advance wide, `font + 2` tall, one
+per panel: after a prompt, the pager marker or a typed line.
 
 ## Deterministic decoration
 
@@ -220,8 +218,7 @@ short_hash = hashlib.sha1(f"{date}|{subject}".encode("utf-8")).hexdigest()[:7]  
 
 Numbers that only exist to look real must not change between builds, or
 the daily job commits a diff for nothing, so hash the thing they decorate.
-Boot's kernel timestamps come from the line index the same way. Real
-values come from data, invented ones from a hash, nothing from `random`.
+Real values come from data, invented ones from a hash, nothing from `random`.
 
 ## ASCII-only text
 
@@ -230,20 +227,18 @@ ASCII may be missing or a different width. `build.py check` warns on every
 character above U+007E except `… · ●`, the box set
 `└ ─ │ ├ ┌ ┐ ┘ ┬ ┴ ┼`, the blocks `▁ ▂ ▃ ▄ ▅ ▆ ▇ █ ░ ▒ ▓` and the arrows
 `→ ← ↑ ↓`, which the common monospace fonts all carry. Use `…` only to mark
-a truncated value and `·` as a separator in a stamp; systemctl draws its
-dot as a `<circle>` rather than `●` so it can pulse. Run every string
-through `theme.esc` so `<`, `&` and quotes cannot break the XML.
+a truncated value; systemctl draws its dot as a `<circle>` rather than `●`
+so it can pulse. Run every string through `theme.esc`.
 
 ## File-size discipline
 
 Keep each SVG under about 300 KB (`check` warns above it) and the page
 under 1.5 MB of images. Bytes go where `values` lists go, so animate only
-elements with something to show: the snake gives an `<animate>` and a
-`<title>` to squares with data and leaves empty squares as plain rects,
-which lands a year of steady activity at about 140 KB. Share one `dur` and
-`keyTimes` list per kind of element, round to two decimals, use `from`/`to`
-for straight lines and `values` only when the path bends, and give a still
-twin only to what moves.
+elements with something to show: the snake animates squares with data and
+leaves empty squares as plain rects, which lands a year of steady activity
+at about 140 KB. Round to two decimals, use `from`/`to` for straight lines
+and `values` only when the path bends, and give a still twin only to what
+moves.
 
 ## Testing
 
@@ -265,12 +260,11 @@ const shown = await page.evaluate(() =>
 Parse before writing so a broken file never reaches the repository, then
 look at it in headless Chromium with Playwright. For the GitHub view, load
 the file through an `<img>` with a `data:` URL and screenshot at two times:
-about 100 ms (mid-animation, to see it move) and after the longest delay,
-3 to 5 s (settled, the state a reader lands on). For reduced motion, inline
-the markup as above: an SVG inside `<img>` is its own document and does not
-receive the emulated media features, so through `<img>` the test passes
-without testing anything. Inline, every row should report opacity 1 at
-100 ms and the still layer should be on screen. Finish with
-`build.py check --strict`, which also catches `<script>`,
+about 100 ms (mid-animation) and after the longest delay, 3 to 5 s (the
+state a reader lands on). For reduced motion, inline the markup as above:
+an SVG inside `<img>` is its own document and does not receive the
+emulated media features, so through `<img>` the test passes without
+testing anything. Inline, every row should report opacity 1 at 100 ms.
+Finish with `build.py check --strict`, which also catches `<script>`,
 `<foreignObject>`, external URLs, animation without a
 `prefers-reduced-motion` rule, odd glyphs and oversized files.
