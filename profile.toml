@@ -1,0 +1,163 @@
+# profile.toml drives everything on this profile page. The engine that reads
+# it lives in skills/github-profile-designer/scripts/ (run `build.py all`).
+# Schema: skills/github-profile-designer/references/profile-schema.md
+
+[profile]
+username = "yuvalkolodkingal"
+name = "Yuval Kolodkin Gal"
+user = "yuval"                 # the user in every prompt
+host = "scojen"                # the host in every prompt
+prompt = "{user}@{host}:~$"
+
+[theme]
+dark = "tokyo-night"
+light = ""                     # "" keeps one dark render; "auto" adds a light twin with <picture>
+width = 860
+
+[data]
+exclude_repos = ["yuvalkolodkingal/yuvalkolodkingal"]   # the profile repo itself is not "work"
+max_language_repos = 40
+cap_share = 0.4                # no single repository may be more than 40% of the language bytes
+
+# --- hero: the machine boots ---------------------------------------------
+
+[boot]
+kernel = "6.18.0-synbio"
+lines = [
+  { kind = "kernel", text = "Linux version {kernel} (yuval@scojen) (python 3.11, node 22) #1 SMP Sep 2026" },
+  { kind = "kernel", text = "Command line: BOOT_IMAGE=/vmlinuz-synbio root=/dev/lab rw quiet" },
+  { kind = "ok", text = "Mounted /research - Scojen Institute, Reichman University." },
+  { kind = "ok", text = "Reached target synthetic-biology.target - Lab Automation and Synthetic Biology." },
+  { kind = "ok", text = "Started calculab.service - Molecular biology and biochemistry calculators." },
+  { kind = "ok", text = "Started full-stack.service - React, Node.js, Flask, Django, Docker." },
+  { kind = "ok", text = "Started snake.service - Contribution graph daemon." },
+  { kind = "ok", text = "Reached target multi-user.target - Multi-User System." },
+]
+banner = "Reichman University tty1"
+
+# --- neofetch: portrait + facts -------------------------------------------
+
+[portrait]
+mode = "helix"                 # helix | image | text; image needs source = "source-prepped.png"
+title = "./portrait.sh"
+
+[neofetch]
+rows = [
+  { key = "OS", value = "Undergraduate Researcher, Scojen Institute" },
+  { key = "Host", value = "Reichman University" },
+  { key = "Kernel", value = "6.18.0-synbio (lab automation, synthetic biology)", color = "teal" },
+  { key = "Uptime", value = "{uptime}" },
+  { key = "Packages", value = "{repos} (repos), 10 (certs)" },
+  { key = "Shell", value = "python 3.11, node 22" },
+  { key = "Resolution", value = "React x Flask x Django" },
+  { key = "DE", value = "Tokyo Night" },
+  { key = "WM", value = "tmux" },
+  { key = "Terminal", value = "GitHub README" },
+  { key = "CPU", value = "Bacillus subtilis @ 37.0C", color = "yellow" },
+  { key = "GPU", value = "pipetting robot" },
+  { key = "Memory", value = "{contributions} contributions / 365 days" },
+  { key = "Top", value = "{top_language}" },
+  { key = "Locale", value = "Rehovot, IL" },
+  { key = "Contact", value = "linkedin.com/in/yuvalkolodkin", color = "blue" },
+]
+
+# --- the calendar and the lab bench ----------------------------------------
+
+[snake]
+
+[plate]
+enabled = true
+width = 330
+
+[systemctl]
+title = "systemctl status calculab.service"
+host = "scojen"
+width = 530
+
+[[projects]]
+name = "calculab"
+label = "calculab.bio"
+description = "Molecular biology calculators"
+url = "https://www.calculab.bio/"
+docs = "https://www.calculab.bio/"
+lines = [
+  "Started calculab.service.",
+  "poster: FISEB / ILANIT 2026, Eilat, station 58",
+  "built with Avichay Nahami, Scojen Institute",
+]
+links = [
+  { label = "built with Avichay Nahami", url = "https://www.linkedin.com/in/avichay-nahami-48765a22b/" },
+]
+
+# --- what is on the machine --------------------------------------------------
+
+[stack]
+title = "ls -F --color=auto ~/stack"
+groups = [
+  { name = "languages", items = ["Python", "JavaScript", "C++"] },
+  { name = "frontend", items = ["React", "HTML5", "CSS3"] },
+  { name = "backend", items = ["Node.js", "Express", "Flask", "Django"] },
+  { name = "infra", items = ["Docker", "Kubernetes", "Linux", "Git", "GitLab", "CI/CD"] },
+]
+show_prompt = false
+
+# --- history ----------------------------------------------------------------
+
+[gitlog]
+
+[[timeline]]
+date = "2026-06"
+subject = "cert: IBM Containers and Kubernetes, Django, Node.js, React, Cloud (5x)"
+
+[[timeline]]
+date = "2026-03"
+subject = "cert: MedCerts Mental Health Development, Difficulties, and Disorders"
+
+[[timeline]]
+date = "2026"
+subject = "poster: CalcuLab at FISEB / ILANIT 2026, Eilat, station 58"
+tag = "fiseb-2026"
+
+[[timeline]]
+date = "2025-12"
+subject = "cert: IBM Applied Software Engineering Fundamentals (specialization) + 3 more"
+
+[[timeline]]
+date = ""
+subject = "feat: ship calculab.bio with Avichay Nahami"
+tag = "v1.0.0"
+
+[[timeline]]
+date = ""
+subject = "join: Scojen Institute, Reichman University (lab automation, synthetic biology)"
+
+# --- contact ------------------------------------------------------------------
+
+[finger]
+office = "Scojen Institute, Reichman University"
+mail = "yuvalkgal@gmail.com"
+site = "https://www.calculab.bio/"
+fields = [
+  { key = "LinkedIn", value = "linkedin.com/in/yuvalkolodkin", color = "blue" },
+]
+plan = [
+  "Lab automation and synthetic biology. Full-stack when the lab needs software.",
+  "Currently: CalcuLab, a web platform for molecular biology calculations.",
+]
+links = [
+  { label = "LinkedIn", url = "https://www.linkedin.com/in/yuvalkolodkin/" },
+  { label = "Email", url = "mailto:yuvalkgal@gmail.com" },
+  { label = "calculab.bio", url = "https://www.calculab.bio/" },
+]
+
+# --- the install one-liner and the way out --------------------------------------
+
+[install]
+show = true
+repo = "yuvalkolodkingal/yuvalkolodkingal"
+
+[exit]
+host = "scojen"
+command = "exit"
+farewell = "Connection to {host} closed."
+show_build = true

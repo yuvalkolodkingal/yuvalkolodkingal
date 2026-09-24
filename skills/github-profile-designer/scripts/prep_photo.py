@@ -13,8 +13,9 @@ This runs locally, once per photo. The daily workflow never touches it, so
 opencv and rembg stay out of the automation's dependencies.
 
     pip install pillow numpy opencv-python rembg
-    python scripts/prep_photo.py source-photo.jpg
-    python scripts/make_ascii_svg.py source-prepped.png
+    python <engine>/prep_photo.py source-photo.jpg      # writes ./source-prepped.png
+    # then in profile.toml: [portrait] mode = "image", source = "source-prepped.png"
+    python <engine>/build.py render --only neofetch
 """
 
 import sys
@@ -23,7 +24,7 @@ from pathlib import Path
 import numpy as np
 from PIL import Image
 
-OUT = Path(__file__).resolve().parent.parent / "source-prepped.png"
+OUT = Path.cwd() / "source-prepped.png"
 
 
 def cut_out(image):
@@ -68,7 +69,7 @@ def main():
 
     gray.save(OUT)
     print(f"{OUT}: {gray.size[0]}x{gray.size[1]}")
-    print("now run: python scripts/make_ascii_svg.py source-prepped.png")
+    print('now set [portrait] mode = "image", source = "source-prepped.png" and run build.py render')
     return 0
 
 

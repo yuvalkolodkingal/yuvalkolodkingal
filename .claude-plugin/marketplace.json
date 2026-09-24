@@ -1,0 +1,27 @@
+{
+  "name": "yuvalkolodkingal",
+  "owner": {
+    "name": "Yuval Kolodkin Gal",
+    "url": "https://github.com/yuvalkolodkingal"
+  },
+  "metadata": {
+    "description": "Terminal-style GitHub profile skills: design one from profile.toml, review any existing one.",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "github-profile-designer",
+      "source": "./skills/github-profile-designer",
+      "description": "Design, generate and maintain an animated terminal-style GitHub profile README as self-contained SVGs, refreshed daily by GitHub Actions.",
+      "version": "1.0.0",
+      "skills": ["./"]
+    },
+    {
+      "name": "github-profile-review",
+      "source": "./skills/github-profile-review",
+      "description": "Audit and score any GitHub profile README for what silently breaks on github.com, with a ranked fix list.",
+      "version": "1.0.0",
+      "skills": ["./"]
+    }
+  ]
+}
