@@ -24,7 +24,9 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python" />
   <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" alt="JavaScript" />
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
   <img src="https://img.shields.io/badge/C%2B%2B-00599C?style=for-the-badge&logo=cplusplus&logoColor=white" alt="C++" />
+  <img src="https://img.shields.io/badge/Go-00ADD8?style=for-the-badge&logo=go&logoColor=white" alt="Go" />
   <br/>
   <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React" />
   <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5" />
@@ -46,7 +48,7 @@
 
 | Project | What it is |
 | :-- | :-- |
-| [**CalcuLab**](https://www.calculab.bio/) | A web platform for molecular biology and biochemistry calculations. Built so researchers stop redoing dilution and molarity arithmetic by hand, where a slipped decimal costs a whole experiment. Made with [Avichay Nahami](https://www.linkedin.com/in/avichay-nahami-48765a22b/) at the Scojen Institute. |
+| [**CalcuLab**](https://www.calculab.bio/) | A web platform for molecular biology and biochemistry calculations. Built so researchers stop redoing dilution and molarity arithmetic by hand, where a sl[...]
 
 ### `yuval@github ~ $ cat research.txt`
 
@@ -83,7 +85,7 @@ calculations people still do on paper, which is now the roadmap.
 ### `yuval@github ~ $ ./contact.sh`
 
 <p align="center">
-  <a href="https://www.linkedin.com/in/yuvalkolodkin/"><img src="https://img.shields.io/badge/LinkedIn-Yuval%20Kolodkin%20Gal-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" /></a>
+  <a href="https://www.linkedin.com/in/yuvalkolodkin/"><img src="https://img.shields.io/badge/LinkedIn-Yuval%20Kolodkin%20Gal-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" /[...]
   <a href="mailto:yuvalkgal@gmail.com"><img src="https://img.shields.io/badge/Email-yuvalkgal%40gmail.com-EA4335?style=for-the-badge&logo=gmail&logoColor=white" alt="Email" /></a>
   <a href="https://www.calculab.bio/"><img src="https://img.shields.io/badge/Website-CalcuLab.bio-00C7B7?style=for-the-badge&logo=googlechrome&logoColor=white" alt="CalcuLab" /></a>
 </p>
@@ -104,7 +106,7 @@ down. Only the flat tech and contact badges come from shields.io.
 | `assets/snake.svg` | `fetch_contributions.py` then `render_snake_svg.py` | Daily, by GitHub Actions |
 | `assets/typing-header.svg` | `make_typing_svg.py` | By hand, when the lines change |
 | `assets/ascii-portrait.svg` | `make_ascii_svg.py` | By hand, when the art changes |
-| `assets/info-card.svg` | `make_info_card.py` | By hand, when the details change |
+| `assets/info-card.svg` | `make_info_card.svg` | By hand, when the details change |
 
 The graph reads the public calendar at
 `github.com/users/<username>/contributions`, which needs no API token, so the
