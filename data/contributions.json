@@ -1,43 +1,8 @@
 {
  "username": "yuvalkolodkingal",
- "generated": "2026-11-21",
- "total": 1566,
+ "generated": "2026-11-22",
+ "total": 1568,
  "days": [
-  {
-   "date": "2025-11-16",
-   "count": 0,
-   "level": 0
-  },
-  {
-   "date": "2025-11-17",
-   "count": 0,
-   "level": 0
-  },
-  {
-   "date": "2025-11-18",
-   "count": 0,
-   "level": 0
-  },
-  {
-   "date": "2025-11-19",
-   "count": 0,
-   "level": 0
-  },
-  {
-   "date": "2025-11-20",
-   "count": 0,
-   "level": 0
-  },
-  {
-   "date": "2025-11-21",
-   "count": 0,
-   "level": 0
-  },
-  {
-   "date": "2025-11-22",
-   "count": 0,
-   "level": 0
-  },
   {
    "date": "2025-11-23",
    "count": 0,
@@ -1855,14 +1820,19 @@
   },
   {
    "date": "2026-11-21",
-   "count": 0,
-   "level": 0
+   "count": 1,
+   "level": 1
+  },
+  {
+   "date": "2026-11-22",
+   "count": 1,
+   "level": 1
   }
  ],
  "stats": {
-  "current_streak": 105,
-  "longest_streak": 105,
-  "active_days": 152,
+  "current_streak": 107,
+  "longest_streak": 107,
+  "active_days": 154,
   "best_day": "2026-10-09",
   "best_day_count": 163,
   "monthly": {
@@ -1878,7 +1848,7 @@
    "2026-08": 226,
    "2026-09": 101,
    "2026-10": 801,
-   "2026-11": 60
+   "2026-11": 62
   }
  }
 }
